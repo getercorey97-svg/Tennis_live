@@ -1,6 +1,6 @@
 import React from 'react';
 import { 
-  Radio,
+  Radio, 
   Activity, 
   Cpu, 
   Database, 
@@ -9,11 +9,12 @@ import {
   Code2, 
   Download, 
   Server,
-  ShieldCheck
+  ShieldCheck,
+  Layers
 } from 'lucide-react';
 import { generateRepositoryZip, downloadBlob } from '../services/zipExport';
 
-export type ActiveTab = 'fanduel' | 'blueprint' | 'simulator' | 'database' | 'learning' | 'backtest' | 'code';
+export type ActiveTab = 'twotrack' | 'fanduel' | 'blueprint' | 'simulator' | 'database' | 'learning' | 'backtest' | 'code';
 
 interface NavbarProps {
   activeTab: ActiveTab;
@@ -36,6 +37,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
   };
 
   const navItems: { id: ActiveTab; label: string; icon: React.FC<{ className?: string }>; badge?: string }[] = [
+    { id: 'twotrack', label: 'Two-Track Live Engine', icon: Layers, badge: 'NEW' },
     { id: 'fanduel', label: 'FanDuel 24/7 Live Radar', icon: Radio, badge: 'LIVE' },
     { id: 'blueprint', label: 'Technical Blueprint (9 Pillars)', icon: Activity },
     { id: 'simulator', label: 'Monte Carlo Engine (50k)', icon: Cpu },

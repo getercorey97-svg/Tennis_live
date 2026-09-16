@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Navbar, ActiveTab } from './components/Navbar';
 import { FanDuelLiveRadarView } from './components/FanDuelLiveRadarView';
+import { TwoTrackEngineView } from './components/TwoTrackEngineView';
 import { BlueprintView } from './components/BlueprintView';
 import { MonteCarloSimulator } from './components/MonteCarloSimulator';
 import { SqliteArchitectureView } from './components/SqliteArchitectureView';
@@ -10,7 +11,7 @@ import { CodeRepositoryView } from './components/CodeRepositoryView';
 import { Radio, ShieldCheck, Cpu, Server, Database } from 'lucide-react';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<ActiveTab>('fanduel');
+  const [activeTab, setActiveTab] = useState<ActiveTab>('twotrack');
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-emerald-500 selection:text-slate-950">
@@ -19,6 +20,7 @@ export default function App() {
 
       {/* Main Content Area */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        {activeTab === 'twotrack' && <TwoTrackEngineView />}
         {activeTab === 'fanduel' && <FanDuelLiveRadarView />}
         {activeTab === 'blueprint' && <BlueprintView />}
         {activeTab === 'simulator' && <MonteCarloSimulator />}

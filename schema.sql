@@ -132,8 +132,50 @@ CREATE TABLE IF NOT EXISTS FanDuel_Live_Markets (
     last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- 8. Autonomous Background Engine Picks (Track 2)
+CREATE TABLE IF NOT EXISTS Autonomous_Picks (
+    match_id TEXT PRIMARY KEY,
+    source_feed TEXT DEFAULT 'ESPN_CORE_TENNIS',
+    tournament TEXT NOT NULL,
+    p1_name TEXT NOT NULL,
+    p2_name TEXT NOT NULL,
+    fixture TEXT NOT NULL,
+    surface TEXT NOT NULL,
+    status TEXT NOT NULL,
+    current_score TEXT,
+    p1_win_prob REAL NOT NULL,
+    p2_win_prob REAL NOT NULL,
+    confidence_pct REAL NOT NULL,
+    predicted_winner TEXT NOT NULL,
+    fair_p1_odds REAL,
+    fair_p2_odds REAL,
+    model_edge_pct REAL DEFAULT 0.0,
+    generated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    resolved INTEGER DEFAULT 0,
+    actual_winner TEXT,
+    prediction_correct INTEGER,
+    final_score TEXT,
+    resolved_at TIMESTAMP
+);
+
+-- 9. Feedback & Model Accuracy Tracking Log (Track 2)
+CREATE TABLE IF NOT EXISTS Engine_Accuracy_Log (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    match_id TEXT NOT NULL,
+    predicted_winner TEXT NOT NULL,
+    actual_winner TEXT NOT NULL,
+    was_correct INTEGER NOT NULL,
+    confidence_pct REAL NOT NULL,
+    win_prob REAL NOT NULL,
+    brier_error REAL NOT NULL,
+    final_score TEXT,
+    feedback_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(match_id) REFERENCES Autonomous_Picks(match_id)
+);
+
 -- Indices for rapid query routing
 CREATE INDEX IF NOT EXISTS idx_forecast_status ON Match_Forecasts(market_status, scheduled_time);
 CREATE INDEX IF NOT EXISTS idx_post_match_learning ON Post_Match_Analysis(learning_applied);
 CREATE INDEX IF NOT EXISTS idx_player_tour ON Player_Baselines(tour, rank);
 CREATE INDEX IF NOT EXISTS idx_fanduel_live ON FanDuel_Live_Markets(is_live, last_updated);
+CREATE INDEX IF NOT EXISTS idx_autonomous_picks_status ON Autonomous_Picks(status, resolved);

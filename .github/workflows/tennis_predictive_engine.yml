@@ -52,17 +52,22 @@ jobs:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: python scripts/fetch_data.py
 
-      - name: 6. Post-Match Micro-Evolution & Bayesian Shrinkage (Zero-Leakage)
+      - name: 6. Two-Track Live Tennis Engine (Track 1: Search & Track 2: ESPN Free Feed Autonomous Picks)
+        env:
+          LIVETENNISAPI_KEY: ${{ secrets.LIVETENNISAPI_KEY }}
+        run: python scripts/live_engine.py --demo
+
+      - name: 7. Post-Match Micro-Evolution & Bayesian Shrinkage (Zero-Leakage)
         run: python scripts/post_mortem_learn.py
 
-      - name: 7. Run 50,000-Iteration Monte Carlo Prediction Framework
+      - name: 8. Run 50,000-Iteration Monte Carlo Prediction Framework
         run: python scripts/predict.py --iterations ${{ inputs.iterations || '50000' }}
 
-      - name: 8. Optional Backtest Execution (50,000 Iterations)
+      - name: 9. Optional Backtest Execution (50,000 Iterations)
         if: ${{ inputs.run_backtest == true }}
         run: python scripts/backtest.py --iterations ${{ inputs.iterations || '50000' }}
 
-      - name: 9. Commit & Push Updated Forecasts Back to Repository
+      - name: 10. Commit & Push Updated Forecasts Back to Repository
         run: |
           git config --global user.name "TennisPredictiveEngineBot"
           git config --global user.email "engine-bot@users.noreply.github.com"

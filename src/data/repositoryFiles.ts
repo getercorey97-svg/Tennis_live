@@ -8,6 +8,38 @@ export interface RepoFile {
 
 export const REPOSITORY_FILES: RepoFile[] = [
   {
+    path: 'scripts/live_engine.py',
+    filename: 'live_engine.py',
+    category: 'scripts',
+    description: 'Two-Track Live Tennis Engine: Track 1 targeted player search via LiveTennisAPI client + Track 2 autonomous background engine via free 24/7 ESPN Core Tennis feed with feedback refinement.',
+    content: `#!/usr/bin/env python3
+"""
+Tennis Predictive Engine - Two-Track Live Tennis Architecture
+Track 1: Targeted Search API via livetennisapi (handles LIVETENNISAPI_KEY)
+Track 2: Autonomous Background Engine via ESPN Core Free Feed (24/7/365, Zero-Key)
+Feedback Mechanism: POST /api/track2/feedback updates model accuracy & Brier calibration
+"""
+import os, sys, json, math, random, sqlite3, logging, asyncio, threading, urllib.request
+from datetime import datetime, timezone
+
+# Track 1: LiveTennisAPI Client
+class LiveTennisAPIClient:
+    def __init__(self, api_key=None):
+        self.api_key = api_key or os.getenv("LIVETENNISAPI_KEY", "")
+    
+    def search_by_player(self, player_name: str):
+        # Filters live & upcoming fixtures by player name
+        ...
+
+# Track 2: Free ESPN Open Core Tennis Feed + Autonomous Worker Loop
+class ESPNFreeTennisFeed:
+    ATP_URL = "https://sports.core.api.espn.com/v2/sports/tennis/leagues/atp/events"
+    WTA_URL = "https://sports.core.api.espn.com/v2/sports/tennis/leagues/wta/events"
+
+# Full source available in scripts/live_engine.py
+`
+  },
+  {
     path: '.github/workflows/fanduel_live_watchdog.yml',
     filename: 'fanduel_live_watchdog.yml',
     category: 'ci_cd',

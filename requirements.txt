@@ -1,4 +1,7 @@
-# Tennis Predictive Engine: Zero-Bloat Dependencies
-# Uses Python standard library (math, random, sqlite3, urllib, json, datetime)
-# No compiler, no C-extensions, no Selenium/Chromium needed.
+# Tennis Predictive Engine: Two-Track Live Tennis Architecture
+# Uses Python standard library + FastAPI + official livetennisapi client
 requests>=2.31.0
+livetennisapi>=1.0.0
+fastapi>=0.110.0
+uvicorn>=0.28.0
+pydantic>=2.0.0

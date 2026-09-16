@@ -19,11 +19,12 @@ from scripts.post_mortem_learn import run_post_match_learning
 from scripts.predict import run_predictions
 from scripts.backtest import run_backtest
 from scripts.fanduel_feed import run_fanduel_watchdog
+from scripts.live_engine import run_cli_demo, background_worker
 
 def main():
     parser = argparse.ArgumentParser(description="Tennis Predictive Engine Master Runner")
-    parser.add_argument("--mode", choices=["all", "predict", "backtest", "learn", "fanduel", "watch"], default="all",
-                        help="Execution mode: all | predict | backtest | learn | fanduel | watch")
+    parser.add_argument("--mode", choices=["all", "predict", "backtest", "learn", "fanduel", "watch", "two-track", "live-engine"], default="all",
+                        help="Execution mode: all | predict | backtest | learn | fanduel | watch | two-track | live-engine")
     parser.add_argument("--iterations", type=int, default=50000,
                         help="Monte Carlo iterations per match (default: 50,000)")
     parser.add_argument("--backtest-matches", type=int, default=100,
@@ -49,20 +50,26 @@ def main():
     if args.mode in ["all", "fanduel"]:
         ingest_fixtures()
 
-    # Step 3: 24/7 Live Watchdog Mode (for GitHub Actions)
+    # Step 3: Two-Track Live Engine (Track 1: Targeted Search, Track 2: Autonomous Engine)
+    if args.mode in ["all", "two-track", "live-engine"]:
+        run_cli_demo()
+        if args.mode in ["two-track", "live-engine"]:
+            return
+
+    # Step 4: 24/7 Live Watchdog Mode (for GitHub Actions)
     if args.mode == "watch":
         run_fanduel_watchdog(poll_interval=args.poll_interval, max_duration=args.watch_duration)
         return
 
-    # Step 4: Post-Match Micro-Evolution
+    # Step 5: Post-Match Micro-Evolution
     if args.mode in ["all", "learn"]:
         run_post_match_learning()
 
-    # Step 5: 50,000-Iteration Predictions
+    # Step 6: 50,000-Iteration Predictions
     if args.mode in ["all", "predict"]:
         run_predictions(iterations=args.iterations)
 
-    # Step 6: 50,000-Iteration Backtest
+    # Step 7: 50,000-Iteration Backtest
     if args.mode in ["all", "backtest"]:
         run_backtest(iterations=args.iterations, sample_size=args.backtest_matches, min_edge=args.min_edge)
 
