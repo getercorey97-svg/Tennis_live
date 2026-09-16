@@ -18,6 +18,14 @@ on:
         required: true
         default: '0.025'
         type: string
+      calibration:
+        description: 'Probability Calibration (isotonic or platt)'
+        required: true
+        default: 'isotonic'
+        type: choice
+        options:
+          - isotonic
+          - platt
 
 jobs:
   backtest:
@@ -41,16 +49,17 @@ jobs:
       - name: Initialize Database
         run: python scripts/database.py
 
-      - name: Execute Deterministic Backtest Replay
+      - name: Execute Deterministic Backtest Replay & Probability Calibration
         run: |
           python scripts/backtest.py \
             --iterations ${{ inputs.iterations || '50000' }} \
             --matches ${{ inputs.sample_size || '500' }} \
-            --min-edge ${{ inputs.min_edge || '0.025' }}
+            --min-edge ${{ inputs.min_edge || '0.025' }} \
+            --calibration ${{ inputs.calibration || 'isotonic' }}
 
-      - name: Commit Updated BACKTEST_REPORT.md
+      - name: Commit Updated Calibration & Backtest Reports
         run: |
           git config --global user.name "TennisBacktestBot"
           git config --global user.email "backtest-bot@users.noreply.github.com"
-          git add BACKTEST_REPORT.md tennis_engine.db
+          git add BACKTEST_REPORT.md calibration_report.json public/calibration_data.json tennis_engine.db
           git diff --staged --quiet || (git commit -m "Auto: Update 50k Backtest Results & Calibration [skip ci]" && git push origin main)
