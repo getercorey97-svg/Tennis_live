@@ -485,15 +485,16 @@ export interface AssessedOutcomeMatch {
   winner: string;
   loser: string;
   finalScore: string;
-  completedAt: string;
-  preMatchPredictedWinner: string;
-  preMatchProb: number;
-  wasCorrect: boolean;
+  completedAt?: string;
+  predictedWinner: string;
+  predictedProb: number;
+  predictionCorrect: boolean;
   brierImprovement: number;
   upgradesApplied: {
     eloAdjustment: string;
     varianceShrinkage: string;
-    modelParameter: string;
+    physicsAdjustment: string;
+    modelParameter?: string;
   };
 }
 
@@ -507,14 +508,14 @@ const INITIAL_ASSESSED_OUTCOMES: AssessedOutcomeMatch[] = [
     loser: 'Daniil Medvedev',
     finalScore: '6-4, 6-3',
     completedAt: 'Earlier Today (Outcome Assessed)',
-    preMatchPredictedWinner: 'Carlos Alcaraz',
-    preMatchProb: 0.642,
-    wasCorrect: true,
+    predictedWinner: 'Carlos Alcaraz',
+    predictedProb: 0.642,
+    predictionCorrect: true,
     brierImprovement: -0.042,
     upgradesApplied: {
       eloAdjustment: 'Hard Court Surface Elo +14.2 pts',
       varianceShrinkage: 'First-serve win % variance shrunk towards true mean by 14%',
-      modelParameter: 'Surface CPI pace multiplier recalibrated for desert climate bounce'
+      physicsAdjustment: 'Surface CPI pace multiplier recalibrated for desert climate bounce'
     }
   },
   {
@@ -526,14 +527,14 @@ const INITIAL_ASSESSED_OUTCOMES: AssessedOutcomeMatch[] = [
     loser: 'Coco Gauff',
     finalScore: '6-2, 7-5',
     completedAt: 'Earlier Today (Outcome Assessed)',
-    preMatchPredictedWinner: 'Iga Swiatek',
-    preMatchProb: 0.688,
-    wasCorrect: true,
+    predictedWinner: 'Iga Swiatek',
+    predictedProb: 0.688,
+    predictionCorrect: true,
     brierImprovement: -0.038,
     upgradesApplied: {
       eloAdjustment: 'WTA Hard Baseline Elo +11.8 pts',
       varianceShrinkage: 'Second-serve return aggression factor stabilized',
-      modelParameter: 'Break-point conversion weight adjusted +6.2%'
+      physicsAdjustment: 'Break-point conversion weight adjusted +6.2%'
     }
   },
   {
@@ -545,14 +546,14 @@ const INITIAL_ASSESSED_OUTCOMES: AssessedOutcomeMatch[] = [
     loser: 'Alexander Zverev',
     finalScore: '7-6(4), 6-4',
     completedAt: 'Earlier Today (Outcome Assessed)',
-    preMatchPredictedWinner: 'Jannik Sinner',
-    preMatchProb: 0.595,
-    wasCorrect: true,
+    predictedWinner: 'Jannik Sinner',
+    predictedProb: 0.595,
+    predictionCorrect: true,
     brierImprovement: -0.029,
     upgradesApplied: {
       eloAdjustment: 'Clutch Tiebreak Elo +9.4 pts',
       varianceShrinkage: 'Pressure point holding rate shrunk with empirical prior',
-      modelParameter: 'Aerodynamic ball trajectory drag constant adjusted for night air density'
+      physicsAdjustment: 'Aerodynamic ball trajectory drag constant adjusted for night air density'
     }
   }
 ];
@@ -827,8 +828,8 @@ export const TwoTrackEngineView: React.FC<TwoTrackEngineViewProps> = ({ onSwitch
     const isCorrect = feedbackWinner.trim().toLowerCase().includes(predicted.toLowerCase()) || 
                       predicted.toLowerCase().includes(feedbackWinner.trim().toLowerCase());
 
-    // Check if match was in Track 1 results or master fixtures, and remove it so finished matches are excluded from search
-    const matchingTrack1 = track1Fixtures.find(
+    // Check if match was in Track 1 results, and remove it so finished matches are excluded from search
+    const matchingTrack1 = track1Results.find(
       m => m.id === feedbackMatchId || 
            m.player1.name.toLowerCase().includes(feedbackWinner.toLowerCase()) || 
            m.player2.name.toLowerCase().includes(feedbackWinner.toLowerCase())
@@ -841,7 +842,6 @@ export const TwoTrackEngineView: React.FC<TwoTrackEngineViewProps> = ({ onSwitch
 
     // Remove from Track 1 search so finished matches are NEVER returned in live/upcoming search
     if (matchingTrack1) {
-      setTrack1Fixtures(prev => prev.filter(m => m.id !== matchingTrack1.id));
       setTrack1Results(prev => prev.filter(m => m.id !== matchingTrack1.id));
     }
 
@@ -876,19 +876,17 @@ export const TwoTrackEngineView: React.FC<TwoTrackEngineViewProps> = ({ onSwitch
     // Add to Assessed Outcomes ledger with mathematical upgrades
     const newAssessed: AssessedOutcomeMatch = {
       id: feedbackMatchId,
-      matchDate: '2026-09-16',
       tournament: tournamentName,
       league: matchingTrack1 ? matchingTrack1.league : 'ATP',
-      player1: { name: p1Name, rank: 6 },
-      player2: { name: p2Name, rank: 14 },
+      fixture: `${p1Name} vs ${p2Name}`,
       winner: feedbackWinner,
       loser: loserName,
       finalScore: feedbackScore || '6-4, 6-3',
-      predictedProb: targetPick ? (targetPick.predicted_winner === targetPick.p1_name ? targetPick.p1_win_prob : targetPick.p2_win_prob) : 0.68,
+      completedAt: 'Just Now (Concluded & Assessed)',
       predictedWinner: predicted,
-      actualWinner: feedbackWinner,
+      predictedProb: targetPick ? (targetPick.predicted_winner === targetPick.p1_name ? targetPick.p1_win_prob : targetPick.p2_win_prob) : 0.68,
       predictionCorrect: isCorrect,
-      brierImprovement: isCorrect ? '-0.038 (Brier loss reduced)' : '+0.012 (Variance expanded)',
+      brierImprovement: isCorrect ? -0.038 : 0.012,
       upgradesApplied: {
         eloAdjustment: isCorrect ? `+14.2 Elo to ${feedbackWinner}` : `-12.5 Elo to ${predicted}`,
         varianceShrinkage: isCorrect ? 'Serve win rate posterior variance shrunk by 7.8%' : 'Empirical Bayes uncertainty widened by 5.2%',
