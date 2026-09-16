@@ -46,7 +46,10 @@ jobs:
       - name: 4. Initialize SQLite Database (WAL Mode)
         run: python scripts/database.py
 
-      - name: 5. Ingest Live Schedules & Match Outcomes
+      - name: 5. Ingest Live Schedules & FanDuel Markets
+        env:
+          THE_ODDS_API_KEY: ${{ secrets.THE_ODDS_API_KEY }}
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: python scripts/fetch_data.py
 
       - name: 6. Post-Match Micro-Evolution & Bayesian Shrinkage (Zero-Leakage)

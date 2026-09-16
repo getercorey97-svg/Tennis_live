@@ -108,7 +108,32 @@ CREATE TABLE IF NOT EXISTS Post_Match_Analysis (
     FOREIGN KEY(match_id) REFERENCES Match_Forecasts(match_id)
 );
 
+-- 7. FanDuel Real-Time Live & Upcoming Markets (24/7 GitHub Actions Watchdog)
+CREATE TABLE IF NOT EXISTS FanDuel_Live_Markets (
+    fanduel_id TEXT PRIMARY KEY,
+    tournament TEXT NOT NULL,
+    p1_name TEXT NOT NULL,
+    p2_name TEXT NOT NULL,
+    is_live INTEGER DEFAULT 0,
+    live_score TEXT,
+    fanduel_p1_odds REAL NOT NULL,
+    fanduel_p2_odds REAL NOT NULL,
+    fanduel_p1_open REAL,
+    fanduel_p2_open REAL,
+    devig_p1_prob REAL,
+    devig_p2_prob REAL,
+    model_p1_prob REAL,
+    model_p2_prob REAL,
+    fair_p1_odds REAL,
+    fair_p2_odds REAL,
+    edge_pct REAL,
+    quarter_kelly_units REAL,
+    best_market TEXT,
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Indices for rapid query routing
 CREATE INDEX IF NOT EXISTS idx_forecast_status ON Match_Forecasts(market_status, scheduled_time);
 CREATE INDEX IF NOT EXISTS idx_post_match_learning ON Post_Match_Analysis(learning_applied);
 CREATE INDEX IF NOT EXISTS idx_player_tour ON Player_Baselines(tour, rank);
+CREATE INDEX IF NOT EXISTS idx_fanduel_live ON FanDuel_Live_Markets(is_live, last_updated);
