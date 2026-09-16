@@ -1,0 +1,6 @@
+{
+  "name": "Tennis Predictive Engine Architecture",
+  "description": "Automated ATP & WTA Monte Carlo predictive engine with The Geter Principle, Markov models, SQLite WAL architecture, continuous micro-evolution, and GitHub Actions orchestration.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
