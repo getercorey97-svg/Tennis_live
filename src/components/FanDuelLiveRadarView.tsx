@@ -3,6 +3,7 @@ import {
   Radio, 
   Flame, 
   Clock, 
+  Calendar,
   TrendingUp, 
   ShieldCheck, 
   ExternalLink, 
@@ -29,6 +30,9 @@ interface FanDuelMatch {
   isLive: boolean;
   liveScore?: string;
   scheduledTime: string;
+  matchDate: string;
+  matchTime: string;
+  fullTimestamp: string;
   fanduelP1Odds: number;
   fanduelP2Odds: number;
   fanduelP1Open: number;
@@ -53,6 +57,9 @@ const INITIAL_FANDUEL_MATCHES: FanDuelMatch[] = [
     isLive: true,
     liveScore: 'Set 3 (6-4, 4-6, 3-2) • Sinner Serving 30-15',
     scheduledTime: 'Live In-Play',
+    matchDate: '2026-09-16',
+    matchTime: '13:00 UTC (09:00 ET)',
+    fullTimestamp: '2026-09-16 13:00:00 UTC',
     fanduelP1Odds: 2.25,
     fanduelP2Odds: 1.68,
     fanduelP1Open: 1.95,
@@ -75,6 +82,9 @@ const INITIAL_FANDUEL_MATCHES: FanDuelMatch[] = [
     isLive: true,
     liveScore: 'Set 2 (6-3, 2-4) • Swiatek Serving 40-30',
     scheduledTime: 'Live In-Play',
+    matchDate: '2026-09-16',
+    matchTime: '14:15 UTC (10:15 ET)',
+    fullTimestamp: '2026-09-16 14:15:00 UTC',
     fanduelP1Odds: 1.82,
     fanduelP2Odds: 2.05,
     fanduelP1Open: 1.72,
@@ -96,6 +106,9 @@ const INITIAL_FANDUEL_MATCHES: FanDuelMatch[] = [
     surface: 'Hard (CPI 42)',
     isLive: false,
     scheduledTime: 'Today • 19:00 ET (23:00 UTC)',
+    matchDate: '2026-09-16',
+    matchTime: '23:00 UTC (19:00 ET)',
+    fullTimestamp: '2026-09-16 23:00:00 UTC',
     fanduelP1Odds: 2.15,
     fanduelP2Odds: 1.75,
     fanduelP1Open: 2.10,
@@ -117,6 +130,9 @@ const INITIAL_FANDUEL_MATCHES: FanDuelMatch[] = [
     surface: 'Hard (CPI 40)',
     isLive: false,
     scheduledTime: 'Tonight • 23:00 ET (03:00 UTC)',
+    matchDate: '2026-09-16',
+    matchTime: '03:00 UTC (23:00 ET)',
+    fullTimestamp: '2026-09-16 03:00:00 UTC',
     fanduelP1Odds: 3.75,
     fanduelP2Odds: 1.30,
     fanduelP1Open: 3.80,
@@ -138,6 +154,9 @@ const INITIAL_FANDUEL_MATCHES: FanDuelMatch[] = [
     surface: 'Hard (CPI 35)',
     isLive: false,
     scheduledTime: 'Tomorrow • 03:30 ET (07:30 UTC)',
+    matchDate: '2026-09-17',
+    matchTime: '07:30 UTC (03:30 ET)',
+    fullTimestamp: '2026-09-17 07:30:00 UTC',
     fanduelP1Odds: 1.90,
     fanduelP2Odds: 1.96,
     fanduelP1Open: 1.88,
@@ -159,6 +178,9 @@ const INITIAL_FANDUEL_MATCHES: FanDuelMatch[] = [
     surface: 'Hard (CPI 39)',
     isLive: false,
     scheduledTime: 'Tomorrow • 06:00 ET (10:00 UTC)',
+    matchDate: '2026-09-17',
+    matchTime: '10:00 UTC (06:00 ET)',
+    fullTimestamp: '2026-09-17 10:00:00 UTC',
     fanduelP1Odds: 1.08,
     fanduelP2Odds: 8.50,
     fanduelP1Open: 1.09,
@@ -368,7 +390,7 @@ export const FanDuelLiveRadarView: React.FC<FanDuelLiveRadarViewProps> = ({ onSw
             >
               {/* Card Header */}
               <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   {m.isLive ? (
                     <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30">
                       <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-ping"></span>
@@ -380,6 +402,14 @@ export const FanDuelLiveRadarView: React.FC<FanDuelLiveRadarViewProps> = ({ onSw
                       {m.scheduledTime}
                     </span>
                   )}
+                  {/* Certified Date & Time Stamp */}
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-medium bg-slate-800/90 text-sky-300 border border-slate-700/80">
+                    <Calendar className="w-3 h-3 text-sky-400" />
+                    <span>{m.matchDate}</span>
+                    <span className="text-slate-600">|</span>
+                    <Clock className="w-3 h-3 text-amber-400" />
+                    <span>{m.matchTime}</span>
+                  </span>
                   <span className="text-xs font-medium text-slate-300">{m.tournament}</span>
                   <span className="text-xs text-slate-500">• {m.surface}</span>
                 </div>
@@ -494,14 +524,14 @@ export const FanDuelLiveRadarView: React.FC<FanDuelLiveRadarViewProps> = ({ onSw
         })}
       </div>
 
-      {/* Architecture & GitHub 24/7 Deep Dive (Why GitHub Actions, not TrebEdit/Termux) */}
+      {/* Architecture & Cloud 24/7 Deep Dive (Render & GitHub Actions Cloud Execution) */}
       <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-6 space-y-4">
         <div className="flex items-center gap-2 text-slate-100 font-bold text-base">
           <Server className="w-5 h-5 text-sky-400" />
-          How GitHub Actions Runs FanDuel Feeds 24/7 (No Mobile / No Termux Required)
+          Cloud Architecture: Render &amp; GitHub Actions 24/7 Automated Feed Ingestion
         </div>
         <p className="text-sm text-slate-300">
-          Mobile apps like TrebEdit or Termux suffer from OS battery savers, CPU throttling, background app termination, and carrier IP drops. By decoupling the engine to <strong>GitHub Actions</strong>, all processing runs continuously in Microsoft Azure cloud containers with high bandwidth, dedicated CPUs, and 99.99% uptime.
+          By deploying the engine across <strong>Render Web Services</strong> and <strong>GitHub Actions</strong>, all data ingestion and Monte Carlo processing runs continuously in dedicated cloud containers with high bandwidth, dedicated CPUs, automated health checks, and 99.99% uptime.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">

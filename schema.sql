@@ -1,6 +1,6 @@
 -- ==============================================================================
 -- Tennis Predictive Engine: SQLite Schema with Write-Ahead Logging (WAL) Mode
--- Designed for GitHub Actions & Mobile TrebEdit / Termux Runtimes
+-- Designed for Render Cloud Web Services & GitHub Actions 24/7 Automation
 -- ==============================================================================
 
 PRAGMA journal_mode = WAL;

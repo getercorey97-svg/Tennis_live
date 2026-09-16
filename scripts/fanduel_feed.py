@@ -517,9 +517,9 @@ def generate_fanduel_radar_markdown(matches: list, filepath: str = "FANDUEL_LIVE
         f"",
         f"- **Primary Feed:** Direct FanDuel Sportsbook Content Managed API (`sbapi.nj.sportsbook.fanduel.com`)",
         f"- **Secondary Feed:** The Odds API (`bookmakers=fanduel`, regions=`us`)",
-        f"- **Execution Workflow:** `.github/workflows/fanduel_live_watchdog.yml`",
+        f"- **Execution Workflow:** Render Web Service & `.github/workflows/fanduel_live_watchdog.yml`",
         f"- **Execution Frequency:** Every 10 minutes via cron + real-time 30-second live in-play polling loops.",
-        f"- **Zero Mobile Dependency:** Runs entirely in GitHub's cloud environment. No phone, no TrebEdit, no Termux required.",
+        f"- **Dedicated Cloud Architecture:** Runs entirely in high-availability cloud container environments with zero manual intervention.",
         f""
     ])
 

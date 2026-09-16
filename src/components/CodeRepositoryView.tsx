@@ -31,7 +31,7 @@ export const CodeRepositoryView: React.FC = () => {
     try {
       setIsExporting(true);
       const blob = await generateRepositoryZip();
-      downloadBlob(blob, 'tennis-predictive-engine-trebedit.zip');
+      downloadBlob(blob, 'tennis-predictive-engine.zip');
     } catch (err) {
       console.error(err);
     } finally {
@@ -41,20 +41,19 @@ export const CodeRepositoryView: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* Mobile TrebEdit & Galaxy S26 Ultra Optimization Banner */}
+      {/* Cloud & Render Architecture Banner */}
       <div className="p-6 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900 to-emerald-950/40 border border-emerald-800/40 shadow-xl space-y-4">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-semibold">
-              <Smartphone className="w-3.5 h-3.5" />
-              Tailored for Samsung Galaxy S26 Ultra & TrebEdit Editor
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-semibold">
+              <Terminal className="w-3.5 h-3.5" />
+              Render Cloud Deployable • 24/7 GitHub Actions Automation
             </div>
             <h2 className="text-xl sm:text-2xl font-bold text-slate-100">
-              Zero-Bloat Mobile Architecture & Production Scripts
+              Full-Stack Tennis Predictive Engine & Production Repository
             </h2>
             <p className="text-xs sm:text-sm text-slate-400 max-w-3xl leading-relaxed">
-              Every script in this repository is built to run on pure Python standard library (<code className="text-emerald-400">math</code>, <code className="text-emerald-400">random</code>, <code className="text-emerald-400">sqlite3</code>, <code className="text-emerald-400">urllib</code>) with zero compilation requirements.
-              You can comfortably edit code in <strong>TrebEdit</strong>, run scripts in <strong>Termux</strong>, or commit directly from your smartphone while GitHub Actions executes the 50,000-iteration Monte Carlo in the cloud.
+              Fully optimized for 1-click deployment on <strong>Render</strong> (as a high-performance static SPA or FastAPI Python Web Service via <code className="text-emerald-400 font-mono">render.yaml</code>) and orchestrated round-the-clock by GitHub Actions for continuous 50,000-iteration Monte Carlo simulations, FanDuel live line tracking, and SQLite WAL persistence.
             </p>
           </div>
 
@@ -68,35 +67,35 @@ export const CodeRepositoryView: React.FC = () => {
           </button>
         </div>
 
-        {/* Mobile Setup Step-by-Step Pills */}
+        {/* Cloud Setup Step-by-Step Pills */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
           <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
             <div className="flex items-center gap-2 text-xs font-bold text-emerald-400">
               <Terminal className="w-3.5 h-3.5" />
-              Step 1: TrebEdit Setup
+              Step 1: Deploy on Render
             </div>
             <p className="text-[11px] text-slate-400 leading-relaxed">
-              Extract the ZIP to your phone storage. In TrebEdit, tap <em>Menu &gt; Open Project</em> and pick the folder.
+              Connect your repo to <strong>Render</strong>. Uses <code className="text-slate-300">render.yaml</code> or creates a Static Site with build command <code className="text-slate-300">npm run build</code> and publish directory <code className="text-slate-300">dist</code>.
             </p>
           </div>
 
           <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
             <div className="flex items-center gap-2 text-xs font-bold text-sky-400">
               <GitBranch className="w-3.5 h-3.5" />
-              Step 2: Git Synchronization
+              Step 2: GitHub Actions CI/CD
             </div>
             <p className="text-[11px] text-slate-400 leading-relaxed">
-              Push to GitHub using Termux (<code className="text-slate-300">git push origin main</code>) or GitHub Mobile web.
+              Automated workflows run 50k Monte Carlo runs and FanDuel live line tracking, pushing reports directly to <code className="text-slate-300">main</code>.
             </p>
           </div>
 
           <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
             <div className="flex items-center gap-2 text-xs font-bold text-purple-400">
-              <Smartphone className="w-3.5 h-3.5" />
-              Step 3: 24/7 Automation
+              <Info className="w-3.5 h-3.5" />
+              Step 3: Zero-Lock SQLite WAL
             </div>
             <p className="text-[11px] text-slate-400 leading-relaxed">
-              GitHub Actions automatically polls, runs 50k simulations, and commits fresh markdown reports every 3 hours.
+              Database operates with Write-Ahead Logging for high-concurrency match storage, time/date stamps, and post-mortem learning.
             </p>
           </div>
         </div>

@@ -1,0 +1,36 @@
+# Render Deployment Blueprint for Tennis Predictive Engine
+# https://render.com/docs/blueprint-spec
+
+services:
+  # 1. Frontend Web Service: Vite React SPA on Render Static Site (Free Global CDN)
+  - type: web
+    name: tennis-predictive-engine
+    env: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    pullRequestPreviewsEnabled: true
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: SAMEORIGIN
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+  # 2. Backend Live Tennis Engine: FastAPI Python Web Service (Optional)
+  - type: web
+    name: tennis-engine-api
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python scripts/live_engine.py --serve
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: LIVETENNISAPI_KEY
+        sync: false
+      - key: THE_ODDS_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false

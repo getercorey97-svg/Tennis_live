@@ -2,7 +2,7 @@
 """
 The Geter Principle & Monte Carlo Tennis Engine
 50,000-Iteration Automated Forecasting & Backtesting Engine.
-Optimized for GitHub Actions 24/7 CI/CD and Samsung Galaxy S26 Ultra / TrebEdit runtime.
+Optimized for Render Cloud Services, GitHub Actions 24/7 CI/CD, and zero-dependency cloud environments.
 Pure Python standard library (math, random) delivering 50,000 matches in < 1.0 second.
 """
 

@@ -29,7 +29,7 @@ export const BLUEPRINT_PILLARS: BlueprintPillar[] = [
       'Match Charting Project (MCP): Sackmann’s shot-by-shot and point-by-point charted dataset, isolating serve direction, unforced error distributions, rally length distributions, and clutch point execution.',
       'Live Schedules & Live Scoring: Flashscore / Sofascore unauthenticated JSON mobile endpoints or RapidAPI Tennis Live Data / Ultimate Tennis API. Automated pure Python ingestion via standard urllib/requests without JavaScript rendering engines or Selenium/Chromium overhead.',
       'Surface & Venue Normalization: Standardizing court labels into Hard, Clay, Grass, and Carpet/Indoor Hard, paired with tournament metadata (altitude in meters and official Court Pace Index).',
-      'Zero-Selenium Compliance: Mobile-optimized architecture running on GitHub Actions runner or Samsung Galaxy S26 Ultra with minimal RAM consumption (<80MB).'
+      'Zero-Selenium Compliance: Cloud-optimized architecture running on Render and GitHub Actions with minimal memory consumption (<80MB).'
     ],
     codeSnippets: [
       {
@@ -247,9 +247,9 @@ WHERE match_id = :match_id;`
   {
     id: 'pillar-6',
     number: 6,
-    title: 'GitHub Actions Orchestration & Mobile TrebEdit Hub',
-    badge: '24/7 CI/CD Pipeline',
-    shortDesc: 'Lightweight GitHub Actions workflow running 24/7 across global time zones, fully editable from TrebEdit on Samsung Galaxy S26 Ultra.',
+    title: 'Render Cloud Deployment & GitHub Actions CI/CD',
+    badge: '24/7 Cloud Architecture',
+    shortDesc: 'Continuous Render Web Service and GitHub Actions workflow running 24/7 across global ATP & WTA time zones.',
     keyFormulas: [
       {
         name: 'Cron Frequency Formulation',
@@ -258,7 +258,7 @@ WHERE match_id = :match_id;`
       }
     ],
     technicalDetails: [
-      'Samsung Galaxy S26 Ultra / TrebEdit Compatibility: 100% dependency-clean Python standard library + requests. No C-extensions requiring compilation (no NumPy/SciPy/Pandas required if preferred, pure Python math/random executes 50k iterations in ~1.4 seconds).',
+      'Render Cloud Deployment & Zero-Dependency Execution: 100% dependency-clean Python standard library + requests. No C-extensions requiring compilation (pure Python math/random executes 50k iterations in ~1.4 seconds on Render and GitHub Actions runners).',
       'Git Concurrency Handling: Auto-rebases before pushing to prevent merge conflicts during concurrent action runs.',
       'Markdown Automation: Automatically generates and publishes PREDICTIONS_TODAY.md and updates repository README.md with live ROI charts.'
     ],

@@ -453,7 +453,7 @@ jobs:
 """
 The Geter Principle & Monte Carlo Tennis Engine
 50,000-Iteration Automated Forecasting & Backtesting Engine.
-Optimized for GitHub Actions 24/7 CI/CD and Samsung Galaxy S26 Ultra / TrebEdit runtime.
+Optimized for Render Cloud Services, GitHub Actions 24/7 CI/CD, and zero-dependency environments.
 Pure Python standard library (math, random) delivering 50,000 matches in < 1.0 second.
 """
 
@@ -1008,13 +1008,64 @@ CREATE TABLE IF NOT EXISTS Match_Forecasts (
 `
   },
   {
+    path: 'render.yaml',
+    filename: 'render.yaml',
+    category: 'core',
+    description: 'Render Cloud deployment blueprint for 1-click provisioning of the Vite React frontend and FastAPI backend.',
+    content: `# Render Deployment Blueprint for Tennis Predictive Engine
+# https://render.com/docs/blueprint-spec
+
+services:
+  # 1. Frontend Web Service: Vite React SPA on Render Static Site (Free Global CDN)
+  - type: web
+    name: tennis-predictive-engine
+    env: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    pullRequestPreviewsEnabled: true
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: SAMEORIGIN
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+  # 2. Backend Live Tennis Engine: FastAPI Python Web Service (Optional)
+  - type: web
+    name: tennis-engine-api
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python scripts/live_engine.py --serve
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: LIVETENNISAPI_KEY
+        sync: false
+      - key: THE_ODDS_API_KEY
+        sync: false
+`
+  },
+  {
+    path: 'RENDER_DEPLOYMENT.md',
+    filename: 'RENDER_DEPLOYMENT.md',
+    category: 'docs',
+    description: 'Complete 1-click Render blueprint and manual deployment guide for static and Python services.',
+    content: `# Deploying Tennis Predictive Engine on Render
+
+Pre-configured for seamless 1-click deployment on Render via render.yaml or Static Site.
+`
+  },
+  {
     path: 'README.md',
     filename: 'README.md',
     category: 'docs',
-    description: 'Complete documentation for running workflows in GitHub Actions and TrebEdit on Samsung Galaxy S26 Ultra.',
+    description: 'Complete documentation for running workflows in GitHub Actions and deploying on Render Cloud.',
     content: `# 🎾 Tennis Predictive Engine (ATP & WTA)
 
-Automated 50,000-Iteration Monte Carlo Forecasting System deployed entirely via GitHub Actions with SQLite in Write-Ahead Logging (WAL) Mode.
+Automated 50,000-Iteration Monte Carlo Forecasting System deployed on Render Cloud and orchestrated via GitHub Actions with SQLite in Write-Ahead Logging (WAL) Mode.
 `
   }
 ];

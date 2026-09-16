@@ -30,7 +30,7 @@ export const BlueprintView: React.FC = () => {
             <p className="text-sm text-slate-400 max-w-3xl leading-relaxed">
               Exhaustive engineering specification designed for a low-margin-of-error predictive engine.
               Features point-by-point Markov dynamics, <strong>The Geter Principle</strong> state stabilization,
-              WAL-mode concurrency, zero data leakage, and GitHub Actions 24/7 orchestration manageable from TrebEdit.
+              WAL-mode concurrency, zero data leakage, and automated Render and GitHub Actions 24/7 orchestration.
             </p>
           </div>
 

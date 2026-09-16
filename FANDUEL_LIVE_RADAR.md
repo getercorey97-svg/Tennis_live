@@ -30,6 +30,6 @@
 
 - **Primary Feed:** Direct FanDuel Sportsbook Content Managed API (`sbapi.nj.sportsbook.fanduel.com`)
 - **Secondary Feed:** The Odds API (`bookmakers=fanduel`, regions=`us`)
-- **Execution Workflow:** `.github/workflows/fanduel_live_watchdog.yml`
+- **Execution Workflow:** Render Cloud Service & `.github/workflows/fanduel_live_watchdog.yml`
 - **Execution Frequency:** Every 10 minutes via cron + real-time 30-second live in-play polling loops.
-- **Zero Mobile Dependency:** Runs entirely in GitHub's cloud environment. No phone, no TrebEdit, no Termux required.
+- **Dedicated Cloud Architecture:** Runs entirely in high-availability cloud container environments with zero manual intervention.

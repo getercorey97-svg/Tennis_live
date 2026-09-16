@@ -93,7 +93,7 @@ export const SqliteArchitectureView: React.FC = () => {
               Zero-Lock Concurrency & PRAGMA Timeout Protection
             </h2>
             <p className="text-xs sm:text-sm text-slate-400 max-w-3xl mt-1 leading-relaxed">
-              Designed specifically for multi-process environments like GitHub Actions and mobile runtimes (TrebEdit).
+              Designed specifically for multi-process environments like Render Web Services, GitHub Actions, and container runtimes.
               In default Rollback Journal mode, concurrent jobs crash with <code className="text-rose-400">database is locked</code>.
               Our engine applies <strong>WAL mode</strong> + <code className="text-emerald-400">PRAGMA busy_timeout = 5000</code> to ensure non-blocking concurrent reads and serialized atomic writes.
             </p>
