@@ -1,0 +1,56 @@
+name: Tennis Backtesting Framework (50,000 Iterations Replay)
+
+on:
+  workflow_dispatch:
+    inputs:
+      iterations:
+        description: 'Monte Carlo Iterations per Match'
+        required: true
+        default: '50000'
+        type: string
+      sample_size:
+        description: 'Number of Historical Matches to Replay'
+        required: true
+        default: '500'
+        type: string
+      min_edge:
+        description: 'Minimum Edge Percentage (+EV Threshold)'
+        required: true
+        default: '0.025'
+        type: string
+
+jobs:
+  backtest:
+    name: Run 50k Historical Replay & Calibration
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Initialize Database
+        run: python scripts/database.py
+
+      - name: Execute Deterministic Backtest Replay
+        run: |
+          python scripts/backtest.py \
+            --iterations ${{ inputs.iterations || '50000' }} \
+            --matches ${{ inputs.sample_size || '500' }} \
+            --min-edge ${{ inputs.min_edge || '0.025' }}
+
+      - name: Commit Updated BACKTEST_REPORT.md
+        run: |
+          git config --global user.name "TennisBacktestBot"
+          git config --global user.email "backtest-bot@users.noreply.github.com"
+          git add BACKTEST_REPORT.md tennis_engine.db
+          git diff --staged --quiet || (git commit -m "Auto: Update 50k Backtest Results & Calibration [skip ci]" && git push origin main)

@@ -1,0 +1,4 @@
+# Tennis Predictive Engine: Zero-Bloat Dependencies
+# Uses Python standard library (math, random, sqlite3, urllib, json, datetime)
+# No compiler, no C-extensions, no Selenium/Chromium needed.
+requests>=2.31.0
