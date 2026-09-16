@@ -18,6 +18,7 @@ import {
   Terminal,
   Activity
 } from 'lucide-react';
+import { DualWorkflowController } from './DualWorkflowController';
 
 interface FanDuelMatch {
   id: string;
@@ -173,7 +174,11 @@ const INITIAL_FANDUEL_MATCHES: FanDuelMatch[] = [
   }
 ];
 
-export const FanDuelLiveRadarView: React.FC = () => {
+interface FanDuelLiveRadarViewProps {
+  onSwitchTab?: (tabId: 'twotrack' | 'fanduel') => void;
+}
+
+export const FanDuelLiveRadarView: React.FC<FanDuelLiveRadarViewProps> = ({ onSwitchTab }) => {
   const [matches, setMatches] = useState<FanDuelMatch[]>(INITIAL_FANDUEL_MATCHES);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastCheckTime, setLastCheckTime] = useState<string>('Just now');
@@ -303,6 +308,9 @@ export const FanDuelLiveRadarView: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Dual Workflow Master Controller */}
+      <DualWorkflowController onSwitchTab={onSwitchTab} />
 
       {/* Filter Tabs */}
       <div className="flex items-center justify-between gap-3">

@@ -1,0 +1,6 @@
+# Git attributes for Tennis Predictive Engine
+# Ensure binary SQLite databases and compiled bytecode are handled properly during merges
+*.db binary merge=binary
+*.sqlite binary merge=binary
+*.sqlite3 binary merge=binary
+*.pyc binary

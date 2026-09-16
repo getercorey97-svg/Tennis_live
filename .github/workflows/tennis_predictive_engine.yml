@@ -17,7 +17,7 @@ on:
         type: boolean
 
 concurrency:
-  group: tennis-engine-ci
+  group: tennis-engine-repo-push
   cancel-in-progress: false
 
 jobs:
@@ -61,11 +61,19 @@ jobs:
         run: python scripts/post_mortem_learn.py
 
       - name: 8. Run 50,000-Iteration Monte Carlo Prediction Framework
-        run: python scripts/predict.py --iterations ${{ inputs.iterations || '50000' }}
+        env:
+          RAW_ITERS: ${{ inputs.iterations }}
+        run: |
+          ITERS="${RAW_ITERS:-50000}"
+          python scripts/predict.py --iterations "$ITERS"
 
       - name: 9. Optional Backtest Execution (50,000 Iterations)
         if: ${{ inputs.run_backtest == true }}
-        run: python scripts/backtest.py --iterations ${{ inputs.iterations || '50000' }}
+        env:
+          RAW_ITERS: ${{ inputs.iterations }}
+        run: |
+          ITERS="${RAW_ITERS:-50000}"
+          python scripts/backtest.py --iterations "$ITERS"
 
       - name: 10. Commit & Push Updated Forecasts Back to Repository
         run: |
@@ -75,7 +83,16 @@ jobs:
           if git diff --staged --quiet; then
             echo "No database or prediction changes to commit."
           else
-            git commit -m "Auto: 50,000 Monte Carlo Forecasts & Micro-Evolution [skip ci]"
-            git pull --rebase origin main
-            git push origin main
+            git commit -m "Auto: 50,000 Monte Carlo Forecasts & Micro-Evolution [skip ci]" || true
+            # Resilient push loop that prevents non-fast-forward push rejections when concurrent workflows run
+            for attempt in {1..5}; do
+              if git push origin main; then
+                echo "✅ Successfully pushed to main on attempt $attempt."
+                break
+              fi
+              echo "Push rejected due to concurrent workflow execution (attempt $attempt/5). Synchronizing with remote..."
+              git fetch origin main
+              git merge -X ours origin/main --no-edit || (git checkout --ours . && git add -A && git commit -m "Merge concurrent changes [skip ci]") || true
+              sleep 3
+            done
           fi

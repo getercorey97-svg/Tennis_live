@@ -23,7 +23,7 @@ on:
         type: string
 
 concurrency:
-  group: fanduel-watchdog-ci
+  group: tennis-engine-repo-push
   cancel-in-progress: false
 
 jobs:
@@ -56,16 +56,22 @@ jobs:
         env:
           THE_ODDS_API_KEY: ${{ secrets.THE_ODDS_API_KEY }}
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+          RAW_DURATION: ${{ inputs.watch_duration_minutes }}
+          RAW_INTERVAL: ${{ inputs.poll_interval_seconds }}
         run: |
-          # Runs high-frequency watchdog checking FanDuel live matches & upcoming slate
+          DURATION="${RAW_DURATION:-600}"
+          INTERVAL="${RAW_INTERVAL:-30}"
           python scripts/fanduel_feed.py \
             --mode watch \
-            --duration ${{ inputs.watch_duration_minutes || '600' }} \
-            --interval ${{ inputs.poll_interval_seconds || '30' }}
+            --duration "$DURATION" \
+            --interval "$INTERVAL"
 
       - name: 6. Update Daily Predictions MD with 50,000 Monte Carlo Iterations
+        env:
+          RAW_ITERS: ${{ inputs.iterations }}
         run: |
-          python scripts/predict.py --iterations ${{ inputs.iterations || '50000' }}
+          ITERS="${RAW_ITERS:-50000}"
+          python scripts/predict.py --iterations "$ITERS"
 
       - name: 7. Commit & Push Real-Time FanDuel Updates to Repository
         run: |
@@ -75,7 +81,16 @@ jobs:
           if git diff --staged --quiet; then
             echo "No live FanDuel line shifts or score changes detected in this cycle."
           else
-            git commit -m "Auto: FanDuel Live In-Play & 50k Monte Carlo Update [skip ci]"
-            git pull --rebase origin main
-            git push origin main
+            git commit -m "Auto: FanDuel Live In-Play & 50k Monte Carlo Update [skip ci]" || true
+            # Resilient push loop that prevents non-fast-forward push rejections when concurrent workflows run
+            for attempt in {1..5}; do
+              if git push origin main; then
+                echo "✅ Successfully pushed to main on attempt $attempt."
+                break
+              fi
+              echo "Push rejected due to concurrent workflow execution (attempt $attempt/5). Synchronizing with remote..."
+              git fetch origin main
+              git merge -X ours origin/main --no-edit || (git checkout --ours . && git add -A && git commit -m "Merge concurrent changes [skip ci]") || true
+              sleep 3
+            done
           fi

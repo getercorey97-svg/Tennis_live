@@ -120,10 +120,126 @@ jobs:
           if git diff --staged --quiet; then
             echo "No live FanDuel line shifts or score changes detected in this cycle."
           else
-            git commit -m "Auto: FanDuel Live In-Play & 50k Monte Carlo Update [skip ci]"
-            git pull --rebase origin main
-            git push origin main
+            git commit -m "Auto: FanDuel Live In-Play & 50k Monte Carlo Update [skip ci]" || true
+            for attempt in {1..5}; do
+              if git push origin main; then
+                echo "✅ Successfully pushed to main."
+                break
+              fi
+              echo "Push rejected due to concurrent workflow (attempt $attempt/5). Synchronizing..."
+              git fetch origin main
+              git merge -X ours origin/main --no-edit || (git checkout --ours . && git add -A && git commit -m "Merge concurrent changes [skip ci]") || true
+              sleep 3
+            done
           fi`
+  },
+  {
+    path: '.github/workflows/dual_live_engine_master.yml',
+    filename: 'dual_live_engine_master.yml',
+    category: 'ci_cd',
+    description: 'Master runner to execute both workflows (Two-Track Engine + FanDuel Live Radar) together without concurrency or push conflicts.',
+    content: `name: Dual Workflow Master (Two-Track Engine + FanDuel Live Radar)
+
+on:
+  schedule:
+    - cron: '0 */2 * * *'
+  workflow_dispatch:
+    inputs:
+      run_two_track:
+        description: 'Run Two-Track Engine (Track 1 Search & Track 2 ESPN Autonomous Feed)'
+        required: true
+        default: true
+        type: boolean
+      run_fanduel:
+        description: 'Run FanDuel Live In-Play Watchdog & Radar Ingestion'
+        required: true
+        default: true
+        type: boolean
+      iterations:
+        description: 'Monte Carlo Iterations per Match'
+        required: true
+        default: '50000'
+        type: string
+
+concurrency:
+  group: tennis-engine-repo-push
+  cancel-in-progress: false
+
+jobs:
+  dual-pipeline-master:
+    name: Execute Dual Workflows (Two-Track + FanDuel Live Radar)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: 1. Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 2. Set Up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 3. Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 4. Initialize Database (WAL Mode)
+        run: python scripts/database.py
+
+      - name: 5. Execute Two-Track Live Tennis Engine (Track 1 & Track 2)
+        if: \${{ inputs.run_two_track != false }}
+        env:
+          LIVETENNISAPI_KEY: \${{ secrets.LIVETENNISAPI_KEY }}
+        run: python scripts/live_engine.py --demo
+
+      - name: 6. Execute FanDuel Real-Time Watchdog & Market Ingestion
+        if: \${{ inputs.run_fanduel != false }}
+        env:
+          THE_ODDS_API_KEY: \${{ secrets.THE_ODDS_API_KEY }}
+          ODDS_API_KEY: \${{ secrets.ODDS_API_KEY }}
+        run: python scripts/fanduel_feed.py --mode watch --duration 180 --interval 30
+
+      - name: 7. Post-Match Micro-Evolution & Bayesian Shrinkage
+        run: python scripts/post_mortem_learn.py
+
+      - name: 8. Run 50,000-Iteration Monte Carlo Prediction Framework
+        env:
+          RAW_ITERS: \${{ inputs.iterations }}
+        run: |
+          ITERS="\${RAW_ITERS:-50000}"
+          python scripts/predict.py --iterations "$ITERS"
+
+      - name: 9. Commit & Push Updated Forecasts & Radar to Repository
+        run: |
+          git config --global user.name "DualWorkflowBot"
+          git config --global user.email "dual-bot@users.noreply.github.com"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Auto: Dual Workflow Sync (Two-Track Engine + FanDuel Radar) [skip ci]" || true
+            for attempt in {1..5}; do
+              if git push origin main; then break; fi
+              git fetch origin main
+              git merge -X ours origin/main --no-edit || true
+              sleep 3
+            done
+          fi`
+  },
+  {
+    path: '.gitattributes',
+    filename: '.gitattributes',
+    category: 'ci_cd',
+    description: 'Git attributes configuration ensuring binary SQLite databases (tennis_engine.db) merge cleanly without textual conflict errors.',
+    content: `*.db binary merge=binary
+*.sqlite binary merge=binary
+*.sqlite3 binary merge=binary
+*.pyc binary`
   },
   {
     path: 'scripts/fanduel_feed.py',

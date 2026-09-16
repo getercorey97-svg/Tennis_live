@@ -782,14 +782,23 @@ def render_backtest_markdown(
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Tennis 50k Backtesting & Calibration Framework")
-    parser.add_argument("--iterations", type=int, default=DEFAULT_ITERATIONS, help="Monte Carlo Iterations per Match (default: 50,000)")
+    parser.add_argument("--iterations", nargs="?", default=str(DEFAULT_ITERATIONS), help="Monte Carlo Iterations per Match (default: 50,000)")
     parser.add_argument("--matches", type=int, default=100, help="Number of historical matches to replay")
     parser.add_argument("--min-edge", type=float, default=0.025, help="Minimum edge threshold (+EV)")
     parser.add_argument("--calibration", type=str, default="isotonic", choices=["isotonic", "platt"], help="Probability calibration algorithm")
     args = parser.parse_args()
     
+    iters = DEFAULT_ITERATIONS
+    if args.iterations:
+        try:
+            val = str(args.iterations).replace(",", "").strip()
+            if val:
+                iters = int(val)
+        except (ValueError, TypeError):
+            iters = DEFAULT_ITERATIONS
+
     run_backtest(
-        iterations=args.iterations,
+        iterations=iters,
         sample_size=args.matches,
         min_edge=args.min_edge,
         calibration_method=args.calibration

@@ -210,6 +210,16 @@ def render_markdown_report(forecasts, iterations: int):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Tennis 50k Prediction Framework")
-    parser.add_argument("--iterations", type=int, default=DEFAULT_ITERATIONS, help="Monte Carlo Iterations (default: 50,000)")
+    parser.add_argument("--iterations", nargs="?", default=str(DEFAULT_ITERATIONS), help="Monte Carlo Iterations (default: 50,000)")
     args = parser.parse_args()
-    run_predictions(iterations=args.iterations)
+    
+    iters = DEFAULT_ITERATIONS
+    if args.iterations:
+        try:
+            val = str(args.iterations).replace(",", "").strip()
+            if val:
+                iters = int(val)
+        except (ValueError, TypeError):
+            iters = DEFAULT_ITERATIONS
+
+    run_predictions(iterations=iters)

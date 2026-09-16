@@ -20,6 +20,7 @@ import {
   HelpCircle,
   ExternalLink
 } from 'lucide-react';
+import { DualWorkflowController } from './DualWorkflowController';
 
 interface MatchScores {
   sets: string[];
@@ -65,7 +66,11 @@ interface AutonomousPick {
   final_score?: string;
 }
 
-export const TwoTrackEngineView: React.FC = () => {
+interface TwoTrackEngineViewProps {
+  onSwitchTab?: (tabId: 'twotrack' | 'fanduel') => void;
+}
+
+export const TwoTrackEngineView: React.FC<TwoTrackEngineViewProps> = ({ onSwitchTab }) => {
   // Track 1 State
   const [searchQuery, setSearchQuery] = useState('Alcaraz');
   const [isSearching, setIsSearching] = useState(false);
@@ -394,6 +399,9 @@ export const TwoTrackEngineView: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Dual Workflow Master Controller */}
+      <DualWorkflowController onSwitchTab={onSwitchTab} />
 
       {/* Metrics Row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

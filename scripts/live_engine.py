@@ -785,8 +785,9 @@ background_worker = AutonomousBackgroundWorker(picks_store, free_espn_feed, poll
 
 # Seed initial picks so store has live data ready immediately
 background_worker.poll_once()
-# Auto-start background daemon thread
-background_worker.start()
+# Daemon thread is started on FastAPI startup event or in CLI runner
+if __name__ == "__main__":
+    background_worker.start()
 
 
 # -----------------------------------------------------------------------------
