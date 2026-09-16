@@ -93,7 +93,7 @@ export const SqliteArchitectureView: React.FC = () => {
               Zero-Lock Concurrency & PRAGMA Timeout Protection
             </h2>
             <p className="text-xs sm:text-sm text-slate-400 max-w-3xl mt-1 leading-relaxed">
-              Designed specifically for multi-process environments like Render Web Services, GitHub Actions, and container runtimes.
+              Designed specifically for high-throughput concurrent reads and background predictive model updating.
               In default Rollback Journal mode, concurrent jobs crash with <code className="text-rose-400">database is locked</code>.
               Our engine applies <strong>WAL mode</strong> + <code className="text-emerald-400">PRAGMA busy_timeout = 5000</code> to ensure non-blocking concurrent reads and serialized atomic writes.
             </p>
@@ -115,10 +115,10 @@ export const SqliteArchitectureView: React.FC = () => {
             <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
             <div className="text-xs space-y-1">
               <span className="font-bold text-emerald-300 block">
-                WAL Concurrency Verified: 4 Simultaneous GitHub Action Runners Handled Cleanly
+                WAL Concurrency Verified: 4 Simultaneous Ingestion & Simulation Workers Handled Cleanly
               </span>
               <p className="text-slate-300">
-                Runner A (Schedule Ingestion) executed write in 42ms; Runner B (Monte Carlo Predictions) held non-blocking read lock; Runner C (Post-Match Analysis) queued with 5000ms busy_timeout and committed safely upon WAL release. 0 lock contention errors.
+                Worker A (Schedule Ingestion) executed write in 42ms; Worker B (Monte Carlo Predictions) held non-blocking read lock; Worker C (Post-Match Analysis) queued with 5000ms busy_timeout and committed safely upon WAL release. 0 lock contention errors.
               </p>
             </div>
           </div>

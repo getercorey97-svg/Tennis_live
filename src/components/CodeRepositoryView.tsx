@@ -1,25 +1,24 @@
 import React, { useState } from 'react';
 import { REPOSITORY_FILES, RepoFile } from '../data/repositoryFiles';
-import { generateRepositoryZip, downloadBlob } from '../services/zipExport';
 import { 
   FolderTree, 
   FileCode, 
   Copy, 
   Check, 
-  Download, 
-  Smartphone, 
-  Terminal, 
-  GitBranch, 
-  ExternalLink,
-  Info
+  Cpu, 
+  BrainCircuit, 
+  Radio, 
+  Activity,
+  Layers
 } from 'lucide-react';
 
 export const CodeRepositoryView: React.FC = () => {
+  // Filter out any raw workflow files so the user only sees algorithms, models, and engine logic
+  const algorithmicFiles = REPOSITORY_FILES.filter(f => !f.path.includes('.github'));
   const [selectedFilePath, setSelectedFilePath] = useState<string>('scripts/monte_carlo.py');
   const [copied, setCopied] = useState<boolean>(false);
-  const [isExporting, setIsExporting] = useState<boolean>(false);
 
-  const currentFile = REPOSITORY_FILES.find(f => f.path === selectedFilePath) || REPOSITORY_FILES[0];
+  const currentFile = algorithmicFiles.find(f => f.path === selectedFilePath) || algorithmicFiles[0];
 
   const handleCopy = () => {
     navigator.clipboard.writeText(currentFile.content);
@@ -27,75 +26,54 @@ export const CodeRepositoryView: React.FC = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleDownloadZip = async () => {
-    try {
-      setIsExporting(true);
-      const blob = await generateRepositoryZip();
-      downloadBlob(blob, 'tennis-predictive-engine.zip');
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsExporting(false);
-    }
-  };
-
   return (
     <div className="space-y-6">
-      {/* Cloud & Render Architecture Banner */}
+      {/* Mathematical Engine Overview Banner */}
       <div className="p-6 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900 to-emerald-950/40 border border-emerald-800/40 shadow-xl space-y-4">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-semibold">
-              <Terminal className="w-3.5 h-3.5" />
-              Render Cloud Deployable • 24/7 GitHub Actions Automation
+              <Cpu className="w-3.5 h-3.5" />
+              Autonomous Mathematical Engine • Core Algorithmic Library
             </div>
             <h2 className="text-xl sm:text-2xl font-bold text-slate-100">
-              Full-Stack Tennis Predictive Engine & Production Repository
+              Predictive Models &amp; Quantitative Engine Source
             </h2>
             <p className="text-xs sm:text-sm text-slate-400 max-w-3xl leading-relaxed">
-              Fully optimized for 1-click deployment on <strong>Render</strong> (as a high-performance static SPA or FastAPI Python Web Service via <code className="text-emerald-400 font-mono">render.yaml</code>) and orchestrated round-the-clock by GitHub Actions for continuous 50,000-iteration Monte Carlo simulations, FanDuel live line tracking, and SQLite WAL persistence.
+              Transparent, open algorithmic implementation: inspect the mathematical foundations powering point-by-point Monte Carlo Markov simulations, empirical Bayesian serve-return updates, and real-time sportsbook line comparisons.
             </p>
           </div>
-
-          <button
-            onClick={handleDownloadZip}
-            disabled={isExporting}
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 active:bg-emerald-600 text-slate-950 font-bold text-sm shadow-lg shadow-emerald-900/40 cursor-pointer disabled:opacity-50 transition-all shrink-0"
-          >
-            <Download className="w-4 h-4" />
-            {isExporting ? 'Generating ZIP...' : 'Download Full Repo ZIP'}
-          </button>
         </div>
 
-        {/* Cloud Setup Step-by-Step Pills */}
+        {/* Engine Pillars */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
           <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
             <div className="flex items-center gap-2 text-xs font-bold text-emerald-400">
-              <Terminal className="w-3.5 h-3.5" />
-              Step 1: Deploy on Render
+              <Cpu className="w-3.5 h-3.5" />
+              Pillar 1: 50,000 Monte Carlo
             </div>
             <p className="text-[11px] text-slate-400 leading-relaxed">
-              Connect your repo to <strong>Render</strong>. Uses <code className="text-slate-300">render.yaml</code> or creates a Static Site with build command <code className="text-slate-300">npm run build</code> and publish directory <code className="text-slate-300">dist</code>.
+              Stochastic point-by-point Markov chains simulating service holds, break points, set tiebreaks, and match outcomes with zero lookahead bias.
             </p>
           </div>
 
           <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
             <div className="flex items-center gap-2 text-xs font-bold text-sky-400">
-              <GitBranch className="w-3.5 h-3.5" />
-              Step 2: GitHub Actions CI/CD
+              <Radio className="w-3.5 h-3.5" />
+              Pillar 2: Real-Time Odds Consensus
             </div>
             <p className="text-[11px] text-slate-400 leading-relaxed">
-              Automated workflows run 50k Monte Carlo runs and FanDuel live line tracking, pushing reports directly to <code className="text-slate-300">main</code>.
+              Dynamically strips sportsbook vig using multi-book consensus to identify mispriced player probabilities with positive expected value (+EV).
             </p>
           </div>
 
           <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
             <div className="flex items-center gap-2 text-xs font-bold text-purple-400">
-              <Info className="w-3.5 h-3.5" />
-              Step 3: Zero-Lock SQLite WAL
+              <BrainCircuit className="w-3.5 h-3.5" />
+              Pillar 3: Adaptive Bayesian Learning
             </div>
             <p className="text-[11px] text-slate-400 leading-relaxed">
-              Database operates with Write-Ahead Logging for high-concurrency match storage, time/date stamps, and post-mortem learning.
+              Post-match outcomes trigger posterior variance shrinkage and surface Elo calibration to continually improve forecasting accuracy.
             </p>
           </div>
         </div>
@@ -108,15 +86,15 @@ export const CodeRepositoryView: React.FC = () => {
           <div className="flex items-center justify-between border-b border-slate-800 pb-2">
             <span className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
               <FolderTree className="w-3.5 h-3.5 text-emerald-400" />
-              Repository File Tree
+              Algorithm Source Files
             </span>
             <span className="text-[10px] font-mono text-slate-500">
-              {REPOSITORY_FILES.length} files
+              {algorithmicFiles.length} files
             </span>
           </div>
 
           <div className="space-y-1">
-            {REPOSITORY_FILES.map((file) => {
+            {algorithmicFiles.map((file) => {
               const isSelected = file.path === selectedFilePath;
               return (
                 <button

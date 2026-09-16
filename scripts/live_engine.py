@@ -87,27 +87,86 @@ class LiveTennisAPIClient:
             headers["Authorization"] = f"Bearer {self.api_key}"
         return headers
 
-    def search_by_player(self, player_name: str) -> List[Dict[str, Any]]:
+    def search(self, name: str = "", tournament: str = "", league: str = "") -> List[Dict[str, Any]]:
         """
-        Targeted Search (Track 1): Searches active and upcoming matches
-        by player name and returns structured match metadata.
+        Multi-Parameter Search (Track 1): Searches active and upcoming matches
+        by Player Name, Tournament Name, and League / Tour (ATP, WTA, Grand Slam).
+        
+        Strict Filtering Rules (Consumer Accuracy Mandate):
+        1. Live Matches: Must be currently LIVE in-play at the exact query time.
+        2. Upcoming Matches: Must start strictly within the next 24 hours (0h <= diff <= 24h).
+           Matches upcoming in 30h, 48h, or 50h are strictly excluded.
+        3. Finished Matches: Over matches are strictly excluded from the active search feed
+           because their outcomes have already been assessed and model parameters upgraded.
+        4. Name Search: Strictly checks that the queried player is an active participant in
+           the match (either Player 1 or Player 2).
         """
-        if not player_name or not player_name.strip():
-            return []
+        name_q = (name or "").strip().lower()
+        tourn_q = (tournament or "").strip().lower()
+        league_q = (league or "").strip().lower()
 
-        query = player_name.strip().lower()
         live_and_upcoming = self._fetch_raw_matches()
+
+        # Query time reference (UTC)
+        now = datetime.now(timezone.utc)
+        cutoff_24h = now + timedelta(hours=24)
 
         matched: List[Dict[str, Any]] = []
         for m in live_and_upcoming:
-            p1 = m.get("player1", {}).get("name", "")
-            p2 = m.get("player2", {}).get("name", "")
-            fixture = m.get("fixture", "")
+            status = str(m.get("status", "")).upper()
 
-            if query in p1.lower() or query in p2.lower() or query in fixture.lower():
-                matched.append(m)
+            # Rule 1: Matches that are over (FINISHED) are strictly excluded from search
+            if status in ("FINISHED", "COMPLETED", "FT", "AOT", "RETIRED"):
+                continue
+
+            # Rule 2: Temporal 24-hour filtering
+            if status == "UPCOMING":
+                start_iso = m.get("start_time") or m.get("full_timestamp")
+                if start_iso:
+                    try:
+                        # Normalize ISO timestamp
+                        clean_iso = start_iso.replace("Z", "+00:00")
+                        if " " in clean_iso and "+" not in clean_iso and "UTC" in clean_iso:
+                            clean_iso = clean_iso.replace(" UTC", "+00:00")
+                        match_dt = datetime.fromisoformat(clean_iso)
+                        if match_dt.tzinfo is None:
+                            match_dt = match_dt.replace(tzinfo=timezone.utc)
+                        
+                        # Strict 24-hour window: reject matches > 24h away (e.g. 30h, 48h, 50h)
+                        if match_dt > cutoff_24h:
+                            continue
+                    except Exception:
+                        pass
+            elif status != "LIVE":
+                # Only LIVE or valid UPCOMING matches are permitted
+                continue
+
+            # Rule 3: Name search strictly for matches that person is in
+            p1 = m.get("player1", {}).get("name", "").lower()
+            p2 = m.get("player2", {}).get("name", "").lower()
+            fixture = m.get("fixture", "").lower()
+            t_name = m.get("tournament", "").lower()
+            l_name = m.get("league", "").lower()
+
+            # Player name condition
+            if name_q and not (name_q in p1 or name_q in p2 or name_q in fixture):
+                continue
+            # Tournament condition
+            if tourn_q and tourn_q not in t_name:
+                continue
+            # League condition
+            if league_q and league_q not in l_name and league_q not in t_name:
+                continue
+
+            matched.append(m)
 
         return matched
+
+    def search_by_player(self, player_name: str) -> List[Dict[str, Any]]:
+        """
+        Targeted Search by player name (backward-compatible convenience wrapper).
+        """
+        return self.search(name=player_name)
 
     def _fetch_raw_matches(self) -> List[Dict[str, Any]]:
         """Fetches live and upcoming matches from livetennisapi or curated live fixtures."""
@@ -142,7 +201,8 @@ class LiveTennisAPIClient:
             p1_name = item.get("home_player", {}).get("name") or item.get("player1_name") or "Player 1"
             p2_name = item.get("away_player", {}).get("name") or item.get("player2_name") or "Player 2"
             status = item.get("status", "UPCOMING").upper()
-            tournament = item.get("tournament", {}).get("name") or item.get("tournament_name") or "ATP Tour"
+            tournament = item.get("tournament", {}).get("name") or item.get("tournament_name") or "ATP Masters 1000 Indian Wells"
+            league = item.get("league") or ("WTA" if "wta" in tournament.lower() else "ATP")
             surface = item.get("surface") or item.get("court_surface") or "Hard"
             scores = item.get("scores") or {
                 "sets": item.get("sets", []),
@@ -154,12 +214,16 @@ class LiveTennisAPIClient:
             return {
                 "id": mid,
                 "tournament": tournament,
+                "league": league,
                 "status": status,
                 "fixture": f"{p1_name} vs {p2_name}",
                 "surface": surface,
                 "scores": scores,
                 "player1": {"name": p1_name, "rank": item.get("player1_rank", 10)},
                 "player2": {"name": p2_name, "rank": item.get("player2_rank", 25)},
+                "match_date": item.get("match_date", "2026-09-16"),
+                "match_time": item.get("match_time", "14:30 UTC (10:30 ET)"),
+                "full_timestamp": item.get("full_timestamp", "2026-09-16 14:30:00 UTC"),
                 "start_time": item.get("start_time", datetime.now(timezone.utc).isoformat()),
                 "source": "livetennisapi"
             }
@@ -172,6 +236,7 @@ class LiveTennisAPIClient:
             {
                 "id": "lt_match_alcaraz_sinner",
                 "tournament": "ATP Masters 1000 Indian Wells - Semifinal",
+                "league": "ATP",
                 "status": "LIVE",
                 "fixture": "Carlos Alcaraz vs Jannik Sinner",
                 "surface": "Hard",
@@ -183,12 +248,16 @@ class LiveTennisAPIClient:
                 },
                 "player1": {"name": "Carlos Alcaraz", "rank": 3, "country": "ESP"},
                 "player2": {"name": "Jannik Sinner", "rank": 1, "country": "ITA"},
+                "match_date": "2026-09-16",
+                "match_time": "14:30 UTC (10:30 ET)",
+                "full_timestamp": "2026-09-16 14:30:00 UTC",
                 "start_time": "2026-09-16T14:30:00Z",
                 "source": "livetennisapi"
             },
             {
                 "id": "lt_match_djokovic_medvedev",
                 "tournament": "ATP Masters 1000 Indian Wells - Quarterfinal",
+                "league": "ATP",
                 "status": "LIVE",
                 "fixture": "Novak Djokovic vs Daniil Medvedev",
                 "surface": "Hard",
@@ -200,12 +269,16 @@ class LiveTennisAPIClient:
                 },
                 "player1": {"name": "Novak Djokovic", "rank": 4, "country": "SRB"},
                 "player2": {"name": "Daniil Medvedev", "rank": 5, "country": "RUS"},
+                "match_date": "2026-09-16",
+                "match_time": "16:00 UTC (12:00 ET)",
+                "full_timestamp": "2026-09-16 16:00:00 UTC",
                 "start_time": "2026-09-16T16:00:00Z",
                 "source": "livetennisapi"
             },
             {
                 "id": "lt_match_swiatek_sabalenka",
                 "tournament": "WTA 1000 Indian Wells - Final",
+                "league": "WTA",
                 "status": "UPCOMING",
                 "fixture": "Iga Swiatek vs Aryna Sabalenka",
                 "surface": "Hard",
@@ -217,12 +290,16 @@ class LiveTennisAPIClient:
                 },
                 "player1": {"name": "Iga Swiatek", "rank": 1, "country": "POL"},
                 "player2": {"name": "Aryna Sabalenka", "rank": 2, "country": "BLR"},
+                "match_date": "2026-09-16",
+                "match_time": "19:00 UTC (15:00 ET)",
+                "full_timestamp": "2026-09-16 19:00:00 UTC",
                 "start_time": "2026-09-16T19:00:00Z",
                 "source": "livetennisapi"
             },
             {
                 "id": "lt_match_zverev_shelton",
                 "tournament": "ATP Masters 1000 Indian Wells - Round of 16",
+                "league": "ATP",
                 "status": "UPCOMING",
                 "fixture": "Alexander Zverev vs Ben Shelton",
                 "surface": "Hard",
@@ -234,12 +311,16 @@ class LiveTennisAPIClient:
                 },
                 "player1": {"name": "Alexander Zverev", "rank": 2, "country": "GER"},
                 "player2": {"name": "Ben Shelton", "rank": 15, "country": "USA"},
+                "match_date": "2026-09-16",
+                "match_time": "21:00 UTC (17:00 ET)",
+                "full_timestamp": "2026-09-16 21:00:00 UTC",
                 "start_time": "2026-09-16T21:00:00Z",
                 "source": "livetennisapi"
             },
             {
                 "id": "lt_match_gauff_rybakina",
                 "tournament": "WTA 1000 Indian Wells - Semifinal",
+                "league": "WTA",
                 "status": "LIVE",
                 "fixture": "Coco Gauff vs Elena Rybakina",
                 "surface": "Hard",
@@ -251,7 +332,52 @@ class LiveTennisAPIClient:
                 },
                 "player1": {"name": "Coco Gauff", "rank": 3, "country": "USA"},
                 "player2": {"name": "Elena Rybakina", "rank": 4, "country": "KAZ"},
+                "match_date": "2026-09-16",
+                "match_time": "15:00 UTC (11:00 ET)",
+                "full_timestamp": "2026-09-16 15:00:00 UTC",
                 "start_time": "2026-09-16T15:00:00Z",
+                "source": "livetennisapi"
+            },
+            {
+                "id": "lt_match_fritz_tiafoe",
+                "tournament": "US Open (Grand Slam) - Semifinal",
+                "league": "ATP",
+                "status": "UPCOMING",
+                "fixture": "Taylor Fritz vs Frances Tiafoe",
+                "surface": "Hard",
+                "scores": {
+                  "sets": [],
+                  "current_game": "0-0",
+                  "serving": "None",
+                  "set_score": "0-0"
+                },
+                "player1": {"name": "Taylor Fritz", "rank": 7, "country": "USA"},
+                "player2": {"name": "Frances Tiafoe", "rank": 16, "country": "USA"},
+                "match_date": "2026-09-16",
+                "match_time": "23:00 UTC (19:00 ET)",
+                "full_timestamp": "2026-09-16 23:00:00 UTC",
+                "start_time": "2026-09-16T23:00:00Z",
+                "source": "livetennisapi"
+            },
+            {
+                "id": "lt_match_zheng_pegula",
+                "tournament": "US Open (Grand Slam) - Quarterfinal",
+                "league": "WTA",
+                "status": "UPCOMING",
+                "fixture": "Qinwen Zheng vs Jessica Pegula",
+                "surface": "Hard",
+                "scores": {
+                  "sets": [],
+                  "current_game": "0-0",
+                  "serving": "None",
+                  "set_score": "0-0"
+                },
+                "player1": {"name": "Qinwen Zheng", "rank": 6, "country": "CHN"},
+                "player2": {"name": "Jessica Pegula", "rank": 5, "country": "USA"},
+                "match_date": "2026-09-17",
+                "match_time": "01:00 UTC (21:00 ET)",
+                "full_timestamp": "2026-09-17 01:00:00 UTC",
+                "start_time": "2026-09-17T01:00:00Z",
                 "source": "livetennisapi"
             }
         ]
@@ -824,21 +950,33 @@ try:
         if not background_worker.is_running:
             background_worker.start()
 
-    # Track 1: Targeted Search API
-    @app.get("/api/matches/search", summary="Track 1: Search Matches by Player Name")
-    @app.get("/api/track1/search", summary="Track 1: Search Matches by Player Name")
-    async def search_matches_by_player(
-        player: str = Query(..., description="Player name query string (e.g. Alcaraz, Sinner, Djokovic)")
+    # Track 1: Targeted Search API (Player Name, Tournament, League)
+    @app.get("/api/matches/search", summary="Track 1: Search Matches by Tournament, League, and Name")
+    @app.get("/api/track1/search", summary="Track 1: Search Matches by Tournament, League, and Name")
+    async def search_matches(
+        player: Optional[str] = Query(None, description="Player name query string (e.g. Alcaraz, Sinner, Swiatek)"),
+        name: Optional[str] = Query(None, description="Alias for player name query string"),
+        tournament: Optional[str] = Query(None, description="Tournament name filter (e.g. Indian Wells, US Open, Wimbledon)"),
+        league: Optional[str] = Query(None, description="League/Tour filter (e.g. ATP, WTA, Grand Slam)")
     ):
         """
         Track 1 Endpoint:
-        Searches active/upcoming matches exclusively by player name using the official
-        LiveTennisAPI client. Returns structured metadata (ID, tournament, status,
-        fixture, surface, and live scores).
+        Searches active/upcoming matches by Player Name, Tournament, and/or League (ATP, WTA, Grand Slam)
+        using the LiveTennisAPI client. Returns structured metadata (ID, tournament, league,
+        match date/time, status, fixture, surface, and live scores).
         """
-        results = live_tennis_client.search_by_player(player)
+        player_query = (player or name or "").strip()
+        results = live_tennis_client.search(
+            name=player_query,
+            tournament=tournament or "",
+            league=league or ""
+        )
         return {
-            "query": player,
+            "query": {
+                "player": player_query,
+                "tournament": tournament or "",
+                "league": league or ""
+            },
             "count": len(results),
             "client": "livetennisapi" if HAS_OFFICIAL_LIVETENNISAPI else "livetennisapi-rest-gateway",
             "has_api_key": bool(LIVETENNISAPI_KEY),

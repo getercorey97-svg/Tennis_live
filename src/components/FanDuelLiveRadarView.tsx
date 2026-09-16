@@ -253,28 +253,29 @@ export const FanDuelLiveRadarView: React.FC<FanDuelLiveRadarViewProps> = ({ onSw
 
   return (
     <div className="space-y-6">
-      {/* 24/7 GitHub Actions Cloud Header */}
+      {/* Consumer-Grade Live Odds Header */}
       <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-sm">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div className="space-y-1">
             <div className="flex flex-wrap items-center gap-2">
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-red-500/10 text-red-400 border border-red-500/20">
                 <span className="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
-                24/7 GitHub Actions Runner Active
+                Live Autonomous Predictive Engine
               </span>
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                 <Radio className="w-3 h-3 animate-pulse text-emerald-400" />
                 FanDuel Sportsbook Feeds Synced
               </span>
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-mono bg-slate-800 text-slate-300">
-                Zero Mobile Runtime Required
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-sky-500/10 text-sky-400 border border-sky-500/20">
+                <Zap className="w-3 h-3 text-sky-400" />
+                Real-Time Odds Sync
               </span>
             </div>
             <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-              FanDuel Real-Time Tennis Radar & Feed Ingestion
+              FanDuel Real-Time Tennis Radar &amp; Odds Ingestion
             </h2>
             <p className="text-sm text-slate-400">
-              Continuously monitoring all matches specifically listed on FanDuel (both active live in-play and upcoming slates all day and all night). Executed 100% on GitHub Actions cloud infrastructure.
+              Continuously monitoring all matches listed on FanDuel (both active live in-play and upcoming slates within 24 hours) with real-time true probability simulation and +EV edge detection.
             </p>
           </div>
 
@@ -323,7 +324,7 @@ export const FanDuelLiveRadarView: React.FC<FanDuelLiveRadarViewProps> = ({ onSw
           <div className="bg-slate-950/60 rounded-lg p-3 border border-slate-800">
             <div className="text-slate-500 flex items-center gap-1">
               <Activity className="w-3.5 h-3.5 text-purple-400" />
-              GitHub Polling Cycle
+              Engine Ingestion Cycle
             </div>
             <div className="text-lg font-bold text-slate-200 mt-0.5 font-mono">Cycle #{tickerCount}</div>
             <div className="text-[11px] text-slate-400">Checked: {lastCheckTime}</div>
@@ -524,24 +525,24 @@ export const FanDuelLiveRadarView: React.FC<FanDuelLiveRadarViewProps> = ({ onSw
         })}
       </div>
 
-      {/* Architecture & Cloud 24/7 Deep Dive (Render & GitHub Actions Cloud Execution) */}
+      {/* Real-Time Market Ingestion & Stochastic Engine Overview */}
       <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-6 space-y-4">
         <div className="flex items-center gap-2 text-slate-100 font-bold text-base">
-          <Server className="w-5 h-5 text-sky-400" />
-          Cloud Architecture: Render &amp; GitHub Actions 24/7 Automated Feed Ingestion
+          <Zap className="w-5 h-5 text-sky-400" />
+          Real-Time Market Ingestion &amp; Stochastic Engine
         </div>
         <p className="text-sm text-slate-300">
-          By deploying the engine across <strong>Render Web Services</strong> and <strong>GitHub Actions</strong>, all data ingestion and Monte Carlo processing runs continuously in dedicated cloud containers with high bandwidth, dedicated CPUs, automated health checks, and 99.99% uptime.
+          Autonomous odds ingestion matching real-time market lines against <strong>50,000-iteration Monte Carlo true probabilities</strong>, detecting high-value betting discrepancies (+EV) across all active ATP and WTA events.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
           <div className="bg-slate-950 p-4 rounded-lg border border-slate-800 space-y-2">
             <div className="text-xs font-semibold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
-              <Terminal className="w-4 h-4" />
-              1. Direct FanDuel API Feed
+              <Radio className="w-4 h-4" />
+              1. Direct Sportsbook Feeds
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Queries FanDuel's content managed endpoint (<code className="text-sky-300">sbapi.nj.sportsbook.fanduel.com</code>) to pull live in-play tennis matches, set scores, point servers, and moneyline prices.
+              Streams real-time lines to ingest in-play tennis scores, point servers, set games, and moneyline prices with 30-second live polling.
             </p>
           </div>
 
@@ -551,28 +552,29 @@ export const FanDuelLiveRadarView: React.FC<FanDuelLiveRadarViewProps> = ({ onSw
               2. 50k Monte Carlo Simulation
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Every newly discovered match or live game score triggers 50,000 point-by-point simulations factoring in CPI, altitude aerodynamic drag, southpaw slice advantage, and The Geter Principle.
+              Every newly discovered score triggers 50,000 point-by-point simulations factoring in CPI, altitude aerodynamic drag, and server dominance.
             </p>
           </div>
 
           <div className="bg-slate-950 p-4 rounded-lg border border-slate-800 space-y-2">
             <div className="text-xs font-semibold text-sky-400 uppercase tracking-wider flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4" />
-              3. Automatic Git Commits
+              3. Dynamic Edge Detection
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
-              The GitHub Actions workflow writes results into <code className="text-amber-300">FANDUEL_LIVE_RADAR.md</code> and <code className="text-amber-300">PREDICTIONS_TODAY.md</code> and pushes back to main, keeping your repository updated 24/7.
+              Calculates statistical edge against market odds, determining whether implied bookmaker margins offer positive expected value (+EV).
             </p>
           </div>
         </div>
 
-        {/* Workflow Dispatch Command Snippet */}
-        <div className="mt-4 p-3 bg-slate-950 border border-slate-800 rounded-lg text-xs font-mono text-slate-300">
-          <div className="text-slate-500 mb-1"># GitHub Actions workflow running round-the-clock:</div>
-          <div className="text-emerald-400">.github/workflows/fanduel_live_watchdog.yml</div>
-          <div className="text-slate-400 mt-1">
-            Trigger on-demand from GitHub Mobile App or Web: <span className="text-sky-300">Actions &rarr; FanDuel 24/7 Live Tennis Watchdog &rarr; Run workflow</span>
+        {/* Live Status Row */}
+        <div className="mt-4 p-3 bg-slate-950 border border-slate-800 rounded-lg text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-slate-300">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span className="font-semibold text-emerald-300">Continuous Odds Radar Active:</span>
+            <span className="text-slate-400">Monitoring in-play line movements and upcoming slates within 24 hours.</span>
           </div>
+          <span className="text-slate-400 font-mono text-[11px]">Updated every 30s</span>
         </div>
       </div>
     </div>

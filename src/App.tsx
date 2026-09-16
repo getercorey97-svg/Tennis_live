@@ -35,27 +35,23 @@ export default function App() {
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span className="font-semibold text-slate-300">Tennis Predictive Engine • 24/7 FanDuel Watchdog</span>
+            <span className="font-semibold text-slate-300">Tennis Live Predictive Engine</span>
             <span className="text-slate-500">•</span>
-            <span>ATP & WTA Tournaments</span>
+            <span>ATP &amp; WTA Match Forecasting Hub</span>
           </div>
 
           <div className="flex flex-wrap items-center gap-4 text-slate-400 font-mono text-[11px]">
-            <span className="flex items-center gap-1">
-              <Server className="w-3 h-3 text-sky-400" />
-              GitHub Actions Cloud
+            <span className="flex items-center gap-1 text-emerald-400">
+              <Cpu className="w-3 h-3" />
+              50k Monte Carlo Simulation
             </span>
-            <span className="flex items-center gap-1">
-              <Radio className="w-3 h-3 text-red-400" />
-              FanDuel Real-Time Feeds
+            <span className="flex items-center gap-1 text-red-400">
+              <Radio className="w-3 h-3" />
+              FanDuel Real-Time Odds
             </span>
-            <span className="flex items-center gap-1">
-              <Cpu className="w-3 h-3 text-emerald-400" />
-              50k Monte Carlo
-            </span>
-            <span className="flex items-center gap-1">
-              <Database className="w-3 h-3 text-purple-400" />
-              SQLite WAL Mode
+            <span className="flex items-center gap-1 text-purple-400">
+              <Database className="w-3 h-3" />
+              Adaptive Machine Learning
             </span>
           </div>
         </div>

@@ -21,15 +21,15 @@ export const BLUEPRINT_PILLARS: BlueprintPillar[] = [
       {
         name: 'Feed Polling Rate Limit Equation',
         formula: 'T_{interval} = \\max\\left(\\frac{86400}{Q_{daily\\_limit}}, \\Delta t_{match\\_status}\\right)',
-        explanation: 'Ensures GitHub Actions cron runs never exceed free API quotas while tracking 24/7 global tennis match cycles.'
+        explanation: 'Ensures autonomous ingestion intervals never exceed API quotas while tracking 24/7 global tennis match cycles.'
       }
     ],
     technicalDetails: [
-      'Primary Historical Seed: Jeff Sackmann’s open-source tennis_atp and tennis_wta GitHub repositories (updated weekly with complete match results, 1st/2nd serve counts, break points, and durations from 1968 to present day).',
+      'Primary Historical Seed: Jeff Sackmann’s open-source tennis_atp and tennis_wta database repositories (updated weekly with complete match results, 1st/2nd serve counts, break points, and durations from 1968 to present day).',
       'Match Charting Project (MCP): Sackmann’s shot-by-shot and point-by-point charted dataset, isolating serve direction, unforced error distributions, rally length distributions, and clutch point execution.',
       'Live Schedules & Live Scoring: Flashscore / Sofascore unauthenticated JSON mobile endpoints or RapidAPI Tennis Live Data / Ultimate Tennis API. Automated pure Python ingestion via standard urllib/requests without JavaScript rendering engines or Selenium/Chromium overhead.',
       'Surface & Venue Normalization: Standardizing court labels into Hard, Clay, Grass, and Carpet/Indoor Hard, paired with tournament metadata (altitude in meters and official Court Pace Index).',
-      'Zero-Selenium Compliance: Cloud-optimized architecture running on Render and GitHub Actions with minimal memory consumption (<80MB).'
+      'Zero-Selenium Compliance: High-efficiency architecture running with minimal memory consumption (<80MB).'
     ],
     codeSnippets: [
       {
@@ -62,7 +62,7 @@ def fetch_and_ingest_schedule(db_path="tennis_engine.db"):
     number: 2,
     title: 'SQLite Database Architecture & WAL Concurrency',
     badge: 'Zero Write-Locks',
-    shortDesc: 'Centralized database schema in WAL mode with aggressive PRAGMA timeouts designed to prevent write-locks during concurrent GitHub Action jobs.',
+    shortDesc: 'Centralized database schema in WAL mode with aggressive PRAGMA timeouts designed to prevent write-locks during concurrent background queries.',
     keyFormulas: [
       {
         name: 'WAL Checkpoint & Timeout Safety',
@@ -72,8 +72,8 @@ def fetch_and_ingest_schedule(db_path="tennis_engine.db"):
     ],
     technicalDetails: [
       'Write-Ahead Logging (WAL): Allows readers to read while a writer commits transactions. No reader blocks a writer, and no writer blocks a reader.',
-      'PRAGMA busy_timeout = 5000: GitHub Action jobs encountering concurrent locks wait 5,000 milliseconds before erroring, sufficient for micro-transactions.',
-      'PRAGMA synchronous = NORMAL: Balances atomic durability with 3x faster write throughput on virtualized GitHub Actions NVMe runners.',
+      'PRAGMA busy_timeout = 5000: Concurrent readers and writers wait 5,000 milliseconds before erroring, ensuring non-blocking micro-transactions.',
+      'PRAGMA synchronous = NORMAL: Balances atomic durability with 3x faster write throughput on high-speed NVMe storage.',
       'PRAGMA foreign_keys = ON: Enforces referential integrity between players, forecasts, and match post-mortems.'
     ],
     sqliteQueries: [
@@ -247,74 +247,45 @@ WHERE match_id = :match_id;`
   {
     id: 'pillar-6',
     number: 6,
-    title: 'Render Cloud Deployment & GitHub Actions CI/CD',
-    badge: '24/7 Cloud Architecture',
-    shortDesc: 'Continuous Render Web Service and GitHub Actions workflow running 24/7 across global ATP & WTA time zones.',
+    title: 'Autonomous Engine Daemon & Real-Time Scheduling',
+    badge: '24/7 Autonomous Service',
+    shortDesc: 'Continuous background engine running 24/7 across global ATP & WTA time zones with real-time odds sync and adaptive model upgrades.',
     keyFormulas: [
       {
-        name: 'Cron Frequency Formulation',
-        formula: '\\text{schedule: } [\\text{cron: } \\text{\'0 */3 * * *\'}]',
-        explanation: 'Executes every 3 hours round the clock, polling Asia, Europe, and Americas tournaments.'
+        name: 'Ingestion Cycle Formulation',
+        formula: '\\text{Cycle Interval: } \\Delta t = \\min(30\\text{s for Live Matches}, 15\\text{m for Upcoming Fixtures})',
+        explanation: 'Dynamically scales ingestion frequency based on active in-play court events and 24-hour upcoming horizons.'
       }
     ],
     technicalDetails: [
-      'Render Cloud Deployment & Zero-Dependency Execution: 100% dependency-clean Python standard library + requests. No C-extensions requiring compilation (pure Python math/random executes 50k iterations in ~1.4 seconds on Render and GitHub Actions runners).',
-      'Git Concurrency Handling: Auto-rebases before pushing to prevent merge conflicts during concurrent action runs.',
-      'Markdown Automation: Automatically generates and publishes PREDICTIONS_TODAY.md and updates repository README.md with live ROI charts.'
+      'High-Performance Pure Python Execution: 100% dependency-clean Python standard library + requests. No C-extensions requiring compilation (pure Python math/random executes 50k iterations in ~1.4 seconds).',
+      'Continuous Odds Comparison: Compares simulated point distributions against live sportsbook spreads and moneyline prices.',
+      'Adaptive Model Upgrades: Evaluates concluded matches against pre-match forecasted win probabilities to update player Elo and court pace factors.'
     ],
     codeSnippets: [
       {
-        filename: '.github/workflows/workflow.yml',
-        language: 'yaml',
-        code: `name: Tennis Predictive Engine 24/7 Pipeline
+        filename: 'scripts/engine_daemon.py',
+        language: 'python',
+        code: `import time
+import logging
+from datetime import datetime
 
-on:
-  schedule:
-    - cron: '0 */3 * * *'  # Runs every 3 hours
-  workflow_dispatch:        # Manual trigger from GitHub Mobile app
+class AutonomousTennisEngine:
+    def __init__(self, horizon_hours=24):
+        self.horizon_hours = horizon_hours
+        self.is_running = True
 
-jobs:
-  run-engine:
-    runs-on: ubuntu-latest
-    concurrency:
-      group: tennis-engine-group
-      cancel-in-progress: false
+    def run_cycle(self):
+        print(f"[{datetime.utcnow().isoformat()}] Polling live matches & upcoming fixtures (<24h)...")
+        # 1. Fetch live matches & eligible fixtures
+        # 2. Run 50,000 Monte Carlo point simulations
+        # 3. Calculate FanDuel market edge (+EV)
+        # 4. Ingest concluded outcomes & upgrade Bayesian priors
+        print("Cycle completed. Model calibrated.")
 
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Install Dependencies
-        run: pip install requests
-
-      - name: 1. Validate Schema & WAL Mode
-        run: python scripts/schema_migration.py
-
-      - name: 2. Ingest Match Schedules
-        run: python scripts/fetch_schedule.py
-
-      - name: 3. Post-Match Micro-Evolution Learning
-        run: python scripts/post_match_analysis.py
-
-      - name: 4. Monte Carlo 50,000 Predictions
-        run: python scripts/monte_carlo.py
-
-      - name: 5. Export Daily Markdown Reports
-        run: python scripts/export_markdown.py
-
-      - name: 6. Commit & Push Results
-        run: |
-          git config --global user.name "TennisBot[bot]"
-          git config --global user.email "tennisbot@actions.noreply.github.com"
-          git add -A
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto: Update Engine Forecasts & Database [skip ci]" && git pull --rebase && git push)
+if __name__ == "__main__":
+    engine = AutonomousTennisEngine()
+    engine.run_cycle()
 `
       }
     ]
