@@ -2,7 +2,7 @@
 
 > **Execution Environment:** GitHub Actions Continuous Runner (Round-The-Clock Automation)
 > **Simulation Engine:** The Geter Principle 50,000-Iteration Monte Carlo
-> **Last Updated:** `2026-09-27 05:56:35 UTC`
+> **Last Updated:** `2026-09-27 11:21:53 UTC`
 
 ---
 
@@ -10,7 +10,7 @@
 
 | Tournament | Matchup & Live Score | FanDuel Live Line | 50k Fair Odds | Model Win% | Live +EV Edge | Stake (Quarter-Kelly) |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **US Open 2026 (Championship)** | **Carlos Alcaraz** vs **Jannik Sinner**<br>🟢 `Set 3 (6-4, 4-6, 3-2) • Sinner Serving 30-15` | Carlos Alcaraz `2.25` (+125)<br>Jannik Sinner `1.68` (-147) | `2.35 / 1.74` | **Carlos Alcaraz:** 42.5%<br>**Jannik Sinner:** 57.5% | Fair | _No Bet_ |
+| **US Open 2026 (Championship)** | **Carlos Alcaraz** vs **Jannik Sinner**<br>🟢 `Set 3 (6-4, 4-6, 3-2) • Sinner Serving 30-15` | Carlos Alcaraz `2.25` (+125)<br>Jannik Sinner `1.68` (-147) | `2.37 / 1.73` | **Carlos Alcaraz:** 42.2%<br>**Jannik Sinner:** 57.8% | Fair | _No Bet_ |
 | **Wuhan Open (WTA 1000 Live)** | **Iga Swiatek** vs **Aryna Sabalenka**<br>🟢 `Set 2 (6-3, 2-4) • Swiatek Serving 40-30` | Iga Swiatek `1.82` (-122)<br>Aryna Sabalenka `2.05` (+105) | `1.36 / 3.81` | **Iga Swiatek:** 73.8%<br>**Aryna Sabalenka:** 26.2% | **+20.78%** | `10.43u` on Iga Swiatek FanDuel ML @ 1.82 (-122) |
 
 ---
@@ -19,10 +19,10 @@
 
 | Tournament | Matchup & Schedule | FanDuel Open → Current | 50k Fair Odds | +EV Edge | Best Market | Recommendation |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **China Open Beijing (FanDuel Featured)** | **Daniil Medvedev** vs **Alexander Zverev**<br>🕒 Upcoming • Today 19:00 ET | Daniil Medvedev: `2.10` → `2.15`<br>Alexander Zverev: `1.78` → `1.75` | `2.32 / 1.75` | 0.00% | `NO_BET` | _Pass_ |
-| **Japan Open Tokyo (FanDuel Board)** | **Ben Shelton** vs **Carlos Alcaraz**<br>🕒 Upcoming • Tonight 23:00 ET | Ben Shelton: `3.80` → `3.75`<br>Carlos Alcaraz: `1.28` → `1.30` | `4.67 / 1.27` | **+4.31%** | `Carlos Alcaraz FanDuel ML @ 1.30 (-333)` | `1.78u` |
-| **Korea Open Seoul (FanDuel Board)** | **Coco Gauff** vs **Elena Rybakina**<br>🕒 Upcoming • Tomorrow 03:30 ET | Coco Gauff: `1.88` → `1.90`<br>Elena Rybakina: `1.98` → `1.96` | `2.34 / 1.75` | **+8.08%** | `Elena Rybakina FanDuel ML @ 1.96 (-104)` | `3.21u` |
-| **Shanghai Masters (ATP 1000 FanDuel Board)** | **Novak Djokovic** vs **Challenger Qualifier**<br>🕒 Upcoming • Tomorrow 06:00 ET | Novak Djokovic: `1.09` → `1.08`<br>Challenger Qualifier: `8.20` → `8.50` | `1.01 / 96.15` | **+10.23%** | `Novak Djokovic FanDuel ML @ 1.08 (-1250)` | `21.49u` |
+| **China Open Beijing (FanDuel Featured)** | **Daniil Medvedev** vs **Alexander Zverev**<br>🕒 Upcoming • Today 19:00 ET | Daniil Medvedev: `2.10` → `2.15`<br>Alexander Zverev: `1.78` → `1.75` | `2.31 / 1.76` | 0.00% | `NO_BET` | _Pass_ |
+| **Japan Open Tokyo (FanDuel Board)** | **Ben Shelton** vs **Carlos Alcaraz**<br>🕒 Upcoming • Tonight 23:00 ET | Ben Shelton: `3.80` → `3.75`<br>Carlos Alcaraz: `1.28` → `1.30` | `4.74 / 1.27` | **+4.62%** | `Carlos Alcaraz FanDuel ML @ 1.30 (-333)` | `2.12u` |
+| **Korea Open Seoul (FanDuel Board)** | **Coco Gauff** vs **Elena Rybakina**<br>🕒 Upcoming • Tomorrow 03:30 ET | Coco Gauff: `1.88` → `1.90`<br>Elena Rybakina: `1.98` → `1.96` | `2.35 / 1.74` | **+8.16%** | `Elena Rybakina FanDuel ML @ 1.96 (-104)` | `3.25u` |
+| **Shanghai Masters (ATP 1000 FanDuel Board)** | **Novak Djokovic** vs **Challenger Qualifier**<br>🕒 Upcoming • Tomorrow 06:00 ET | Novak Djokovic: `1.09` → `1.08`<br>Challenger Qualifier: `8.20` → `8.50` | `1.01 / 86.96` | **+10.12%** | `Novak Djokovic FanDuel ML @ 1.08 (-1250)` | `21.12u` |
 
 ---
 
