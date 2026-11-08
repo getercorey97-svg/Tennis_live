@@ -2,7 +2,7 @@
 
 > **Execution Environment:** GitHub Actions Continuous Runner (Round-The-Clock Automation)
 > **Simulation Engine:** The Geter Principle 50,000-Iteration Monte Carlo
-> **Last Updated:** `2026-11-08 08:38:15 UTC`
+> **Last Updated:** `2026-11-08 15:39:49 UTC`
 
 ---
 
@@ -20,9 +20,9 @@
 | Tournament | Matchup & Schedule | FanDuel Open → Current | 50k Fair Odds | +EV Edge | Best Market | Recommendation |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **China Open Beijing (FanDuel Featured)** | **Daniil Medvedev** vs **Alexander Zverev**<br>🕒 Upcoming • Today 19:00 ET | Daniil Medvedev: `2.10` → `2.15`<br>Alexander Zverev: `1.78` → `1.75` | `2.32 / 1.76` | 0.00% | `NO_BET` | _Pass_ |
-| **Japan Open Tokyo (FanDuel Board)** | **Ben Shelton** vs **Carlos Alcaraz**<br>🕒 Upcoming • Tonight 23:00 ET | Ben Shelton: `3.80` → `3.75`<br>Carlos Alcaraz: `1.28` → `1.30` | `4.70 / 1.27` | **+4.46%** | `Carlos Alcaraz FanDuel ML @ 1.30 (-333)` | `1.95u` |
-| **Korea Open Seoul (FanDuel Board)** | **Coco Gauff** vs **Elena Rybakina**<br>🕒 Upcoming • Tomorrow 03:30 ET | Coco Gauff: `1.88` → `1.90`<br>Elena Rybakina: `1.98` → `1.96` | `2.35 / 1.74` | **+8.32%** | `Elena Rybakina FanDuel ML @ 1.96 (-104)` | `3.33u` |
-| **Shanghai Masters (ATP 1000 FanDuel Board)** | **Novak Djokovic** vs **Challenger Qualifier**<br>🕒 Upcoming • Tomorrow 06:00 ET | Novak Djokovic: `1.09` → `1.08`<br>Challenger Qualifier: `8.20` → `8.50` | `1.01 / 89.93` | **+10.16%** | `Novak Djokovic FanDuel ML @ 1.08 (-1250)` | `21.25u` |
+| **Japan Open Tokyo (FanDuel Board)** | **Ben Shelton** vs **Carlos Alcaraz**<br>🕒 Upcoming • Tonight 23:00 ET | Ben Shelton: `3.80` → `3.75`<br>Carlos Alcaraz: `1.28` → `1.30` | `4.72 / 1.27` | **+4.55%** | `Carlos Alcaraz FanDuel ML @ 1.30 (-333)` | `2.04u` |
+| **Korea Open Seoul (FanDuel Board)** | **Coco Gauff** vs **Elena Rybakina**<br>🕒 Upcoming • Tomorrow 03:30 ET | Coco Gauff: `1.88` → `1.90`<br>Elena Rybakina: `1.98` → `1.96` | `2.34 / 1.75` | **+8.05%** | `Elena Rybakina FanDuel ML @ 1.96 (-104)` | `3.19u` |
+| **Shanghai Masters (ATP 1000 FanDuel Board)** | **Novak Djokovic** vs **Challenger Qualifier**<br>🕒 Upcoming • Tomorrow 06:00 ET | Novak Djokovic: `1.09` → `1.08`<br>Challenger Qualifier: `8.20` → `8.50` | `1.01 / 88.65` | **+10.14%** | `Novak Djokovic FanDuel ML @ 1.08 (-1250)` | `21.19u` |
 
 ---
 
