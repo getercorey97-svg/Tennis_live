@@ -2,7 +2,7 @@
 
 > **Execution Environment:** GitHub Actions Continuous Runner (Round-The-Clock Automation)
 > **Simulation Engine:** The Geter Principle 50,000-Iteration Monte Carlo
-> **Last Updated:** `2026-11-22 22:49:28 UTC`
+> **Last Updated:** `2026-11-23 03:17:45 UTC`
 
 ---
 
@@ -20,8 +20,8 @@
 | Tournament | Matchup & Schedule | FanDuel Open → Current | 50k Fair Odds | +EV Edge | Best Market | Recommendation |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **China Open Beijing (FanDuel Featured)** | **Daniil Medvedev** vs **Alexander Zverev**<br>🕒 Upcoming • Today 19:00 ET | Daniil Medvedev: `2.10` → `2.15`<br>Alexander Zverev: `1.78` → `1.75` | `2.30 / 1.77` | 0.00% | `NO_BET` | _Pass_ |
-| **Japan Open Tokyo (FanDuel Board)** | **Ben Shelton** vs **Carlos Alcaraz**<br>🕒 Upcoming • Tonight 23:00 ET | Ben Shelton: `3.80` → `3.75`<br>Carlos Alcaraz: `1.28` → `1.30` | `4.71 / 1.27` | **+4.50%** | `Carlos Alcaraz FanDuel ML @ 1.30 (-333)` | `1.99u` |
-| **Korea Open Seoul (FanDuel Board)** | **Coco Gauff** vs **Elena Rybakina**<br>🕒 Upcoming • Tomorrow 03:30 ET | Coco Gauff: `1.88` → `1.90`<br>Elena Rybakina: `1.98` → `1.96` | `2.35 / 1.74` | **+8.29%** | `Elena Rybakina FanDuel ML @ 1.96 (-104)` | `3.31u` |
+| **Japan Open Tokyo (FanDuel Board)** | **Ben Shelton** vs **Carlos Alcaraz**<br>🕒 Upcoming • Tonight 23:00 ET | Ben Shelton: `3.80` → `3.75`<br>Carlos Alcaraz: `1.28` → `1.30` | `4.65 / 1.27` | **+4.23%** | `Carlos Alcaraz FanDuel ML @ 1.30 (-333)` | `1.70u` |
+| **Korea Open Seoul (FanDuel Board)** | **Coco Gauff** vs **Elena Rybakina**<br>🕒 Upcoming • Tomorrow 03:30 ET | Coco Gauff: `1.88` → `1.90`<br>Elena Rybakina: `1.98` → `1.96` | `2.36 / 1.74` | **+8.40%** | `Elena Rybakina FanDuel ML @ 1.96 (-104)` | `3.37u` |
 | **Shanghai Masters (ATP 1000 FanDuel Board)** | **Novak Djokovic** vs **Challenger Qualifier**<br>🕒 Upcoming • Tomorrow 06:00 ET | Novak Djokovic: `1.09` → `1.08`<br>Challenger Qualifier: `8.20` → `8.50` | `1.01 / 89.44` | **+10.15%** | `Novak Djokovic FanDuel ML @ 1.08 (-1250)` | `21.22u` |
 
 ---
